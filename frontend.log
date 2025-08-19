@@ -1,0 +1,124 @@
+
+> pdrm-frontend@1.0.0 start
+> react-scripts start
+
+(node:674353) [DEP_WEBPACK_DEV_SERVER_ON_AFTER_SETUP_MIDDLEWARE] DeprecationWarning: 'onAfterSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:674353) [DEP_WEBPACK_DEV_SERVER_ON_BEFORE_SETUP_MIDDLEWARE] DeprecationWarning: 'onBeforeSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option.
+Starting the development server...
+
+Compiled successfully!
+
+You can now view pdrm-frontend in the browser.
+
+  Local:            http://localhost:3015
+  On Your Network:  http://192.168.50.238:3015
+
+Note that the development build is not optimized.
+To create a production build, use npm run build.
+
+webpack compiled successfully
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/pages/CreateReport.js
+  Line 6:3:     'DocumentTextIcon' is defined but never used                                                                                                                                                     no-unused-vars
+  Line 7:3:     'PhotoIcon' is defined but never used                                                                                                                                                            no-unused-vars
+  Line 568:15:  Redundant alt attribute. Screen-readers already announce `img` tags as an image. You don’t need to use the words `image`, `photo,` or `picture` (or any specified custom words) in the alt prop  jsx-a11y/img-redundant-alt
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/pages/CreateReport.js
+  Line 6:3:     'DocumentTextIcon' is defined but never used                                                                                                                                                     no-unused-vars
+  Line 7:3:     'PhotoIcon' is defined but never used                                                                                                                                                            no-unused-vars
+  Line 568:15:  Redundant alt attribute. Screen-readers already announce `img` tags as an image. You don’t need to use the words `image`, `photo,` or `picture` (or any specified custom words) in the alt prop  jsx-a11y/img-redundant-alt
+
+webpack compiled with 1 warning
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/pages/CreateReport.js
+  Line 6:3:  'DocumentTextIcon' is defined but never used  no-unused-vars
+  Line 7:3:  'PhotoIcon' is defined but never used         no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/pages/CreateReport.js
+  Line 6:3:  'DocumentTextIcon' is defined but never used  no-unused-vars
+  Line 7:3:  'PhotoIcon' is defined but never used         no-unused-vars
+
+webpack compiled with 1 warning
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/pages/CreateReport.js
+  Line 6:3:  'DocumentTextIcon' is defined but never used  no-unused-vars
+  Line 7:3:  'PhotoIcon' is defined but never used         no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/pages/CreateReport.js
+  Line 6:3:  'DocumentTextIcon' is defined but never used  no-unused-vars
+  Line 7:3:  'PhotoIcon' is defined but never used         no-unused-vars
+
+webpack compiled with 1 warning
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/pages/CreateReport.js
+  Line 6:3:  'DocumentTextIcon' is defined but never used  no-unused-vars
+  Line 7:3:  'PhotoIcon' is defined but never used         no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/pages/CreateReport.js
+  Line 6:3:  'DocumentTextIcon' is defined but never used  no-unused-vars
+  Line 7:3:  'PhotoIcon' is defined but never used         no-unused-vars
+
+webpack compiled with 1 warning
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/pages/CreateReport.js
+  Line 6:3:  'DocumentTextIcon' is defined but never used  no-unused-vars
+  Line 7:3:  'PhotoIcon' is defined but never used         no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/pages/CreateReport.js
+  Line 6:3:  'DocumentTextIcon' is defined but never used  no-unused-vars
+  Line 7:3:  'PhotoIcon' is defined but never used         no-unused-vars
+
+webpack compiled with 1 warning
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src/pages/CreateReport.js
+  Line 6:3:  'DocumentTextIcon' is defined but never used  no-unused-vars
+  Line 7:3:  'PhotoIcon' is defined but never used         no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src/pages/CreateReport.js
+  Line 6:3:  'DocumentTextIcon' is defined but never used  no-unused-vars
+  Line 7:3:  'PhotoIcon' is defined but never used         no-unused-vars
+
+webpack compiled with 1 warning

@@ -1,0 +1,66 @@
+INFO:     Will watch for changes in these directories: ['/home/aitpc1/Wasabi/Repositories/pdrm']
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+INFO:     Started reloader process [674157] using WatchFiles
+INFO:     Started server process [674300]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     127.0.0.1:53582 - "GET /health HTTP/1.1" 200 OK
+INFO:     None:0 - "GET /main.3a203fe47ff40db22f80.hot-update.json HTTP/1.1" 404 Not Found
+INFO:     None:0 - "GET /main.3a203fe47ff40db22f80.hot-update.json HTTP/1.1" 404 Not Found
+INFO:     None:0 - "GET /main.3a203fe47ff40db22f80.hot-update.json HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:33130 - "OPTIONS /auth/login HTTP/1.1" 200 OK
+2025-08-18 23:17:35,551 - passlib.handlers.bcrypt - WARNING - (trapped) error reading bcrypt version
+Traceback (most recent call last):
+  File "/home/aitpc1/.pyenv/versions/3.12.2/lib/python3.12/site-packages/passlib/handlers/bcrypt.py", line 620, in _load_backend_mixin
+    version = _bcrypt.__about__.__version__
+              ^^^^^^^^^^^^^^^^^
+AttributeError: module 'bcrypt' has no attribute '__about__'
+INFO:     127.0.0.1:33136 - "POST /auth/login HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33136 - "OPTIONS /auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33130 - "GET /auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33130 - "OPTIONS /reports HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33136 - "GET /reports HTTP/1.1" 200 OK
+INFO:     127.0.0.1:40558 - "OPTIONS /reports/1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:40560 - "GET /reports/1 HTTP/1.1" 200 OK
+INFO:     None:0 - "GET /55c106d1-4c20-4ce1-a144-b33bf4cc6083.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38724 - "GET /reports HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37566 - "GET /reports HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39478 - "GET /reports HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54592 - "OPTIONS /auth/login HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54598 - "POST /auth/login HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54598 - "OPTIONS /auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54592 - "GET /auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54592 - "OPTIONS /insurance/reports HTTP/1.1" 200 OK
+2025-08-18 23:28:36,243 - main - INFO - Insurance agent insurance@vrs.com.my requesting reports
+2025-08-18 23:28:36,245 - main - INFO - Found 4 reports for insurance review
+INFO:     127.0.0.1:54598 - "GET /insurance/reports HTTP/1.1" 200 OK
+2025-08-18 23:28:40,843 - main - INFO - Insurance agent insurance@vrs.com.my requesting reports
+2025-08-18 23:28:40,844 - main - INFO - Found 4 reports for insurance review
+INFO:     127.0.0.1:54598 - "GET /insurance/reports HTTP/1.1" 200 OK
+INFO:     None:0 - "GET /8a0ddb65-b565-4e3b-9ca7-8d7cccda2862.jpg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:43510 - "OPTIONS /insurance/analyze-complete/5 HTTP/1.1" 200 OK
+2025-08-18 23:28:52,795 - main - INFO - Starting complete analysis for report 5
+2025-08-18 23:28:52,798 - main - INFO - Running VLM analysis...
+2025-08-18 23:28:56,877 - main - INFO - VLM analysis completed with confidence: 0.7
+2025-08-18 23:28:56,877 - main - INFO - Running LLM discrepancy analysis...
+2025-08-18 23:29:05,484 - main - INFO - LLM analysis completed with confidence: 0.7
+INFO:     127.0.0.1:43512 - "POST /insurance/analyze-complete/5 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38804 - "OPTIONS /insurance/analysis HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38806 - "POST /insurance/analysis HTTP/1.1" 422 Unprocessable Entity
+INFO:     127.0.0.1:37282 - "OPTIONS /auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37294 - "OPTIONS /auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37296 - "GET /auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37296 - "GET /auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37296 - "OPTIONS /insurance/reports HTTP/1.1" 200 OK
+2025-08-18 23:40:20,714 - main - INFO - Insurance agent insurance@vrs.com.my requesting reports
+2025-08-18 23:40:20,715 - main - INFO - Found 4 reports for insurance review
+INFO:     127.0.0.1:37294 - "GET /insurance/reports HTTP/1.1" 200 OK
+2025-08-18 23:40:26,991 - main - INFO - Insurance agent insurance@vrs.com.my requesting reports
+2025-08-18 23:40:26,992 - main - INFO - Found 4 reports for insurance review
+INFO:     127.0.0.1:39488 - "GET /insurance/reports HTTP/1.1" 200 OK
+2025-08-18 23:40:32,062 - main - INFO - Insurance agent insurance@vrs.com.my requesting reports
+2025-08-18 23:40:32,063 - main - INFO - Found 4 reports for insurance review
+INFO:     127.0.0.1:39500 - "GET /insurance/reports HTTP/1.1" 200 OK
+2025-08-18 23:40:35,953 - main - INFO - Insurance agent insurance@vrs.com.my requesting reports
+2025-08-18 23:40:35,953 - main - INFO - Found 4 reports for insurance review
+INFO:     127.0.0.1:39500 - "GET /insurance/reports HTTP/1.1" 200 OK
