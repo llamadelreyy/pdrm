@@ -46,7 +46,9 @@ backend.log
 frontend.log
 
 # Node.js (Frontend)
+node_modules/
 frontend/node_modules/
+frontend/.cache/
 frontend/npm-debug.log*
 frontend/yarn-debug.log*
 frontend/yarn-error.log*
@@ -134,3 +136,11 @@ tests/
 # Backup files
 *.bak
 *.backup
+
+# Large files that should not be committed
+*.pack
+*.idx
+
+# Cache directories
+.cache/
+*/.cache/
