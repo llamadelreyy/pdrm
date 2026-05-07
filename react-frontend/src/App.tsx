@@ -16,6 +16,7 @@ import BasicTables from "./pages/Tables/BasicTables";
 import ReportForm from "./pages/Forms/ReportForm";
 import Chat from "./pages/Chat";
 import Blank from "./pages/Blank";
+import SemakanSaman from "./pages/SemakanSaman";
 import AppLayout from "./layout/AppLayout";
 import { ScrollToTop } from "./components/common/ScrollToTop";
 import Home from "./pages/Dashboard/Home";
@@ -47,6 +48,7 @@ export default function App() {
             {/* Forms */}
             <Route path="/form-elements" element={<ReportForm />} />
             <Route path="/chat" element={<Chat />} />
+            <Route path="/semakan-saman" element={<SemakanSaman />} />
 
             {/* Tables */}
             <Route path="/basic-tables" element={<BasicTables />} />
