@@ -3,8 +3,14 @@
 # PDRM Accident Reporting System - Startup Script
 # This script starts both the FastAPI backend and React frontend
 
+# Define base directory
+BASE_DIR="$(cd "$(dirname "$0")" && pwd)"
+BACKEND_DIR="$BASE_DIR/backend"
+FRONTEND_DIR="$BASE_DIR/react-frontend"
+
 echo "🚀 Starting PDRM Accident Reporting System..."
 echo "================================================"
+echo "Base directory: $BASE_DIR"
 
 # Colors for output
 RED='\033[0;31m'
@@ -74,22 +80,21 @@ if port_in_use 5173; then
 fi
 
 # Create uploads directory if it doesn't exist
-mkdir -p backend/uploads
+mkdir -p "$BACKEND_DIR/uploads"
 
 # Initialize database
 echo -e "${BLUE}🗄️  Initializing database...${NC}"
-cd backend && python3 -c "from database import create_tables; create_tables()" 2>/dev/null
+cd "$BACKEND_DIR" && python3 -c "from database import create_tables; create_tables()" 2>/dev/null
 if [ $? -eq 0 ]; then
     echo -e "${GREEN}✅ Database initialized${NC}"
 else
     echo -e "${YELLOW}⚠️  Database may already be initialized${NC}"
 fi
-cd ..
 
 # Install Python dependencies if needed
-if [ ! -f "backend/.venv_initialized" ]; then
+if [ ! -f "$BACKEND_DIR/.venv_initialized" ]; then
     echo -e "${BLUE}📦 Installing Python dependencies...${NC}"
-    cd backend && pip install -r requirements.txt > /dev/null 2>&1
+    cd "$BACKEND_DIR" && python3 -m pip install -r requirements.txt > /dev/null 2>&1
     if [ $? -eq 0 ]; then
         touch .venv_initialized
         echo -e "${GREEN}✅ Python dependencies installed${NC}"
@@ -97,15 +102,14 @@ if [ ! -f "backend/.venv_initialized" ]; then
         echo -e "${RED}❌ Failed to install Python dependencies${NC}"
         exit 1
     fi
-    cd ..
 else
     echo -e "${GREEN}✅ Python dependencies already installed${NC}"
 fi
 
 # Install Node.js dependencies if needed
-if [ ! -d "react-frontend/node_modules" ]; then
+if [ ! -d "$FRONTEND_DIR/node_modules" ]; then
     echo -e "${BLUE}📦 Installing Node.js dependencies...${NC}"
-    cd react-frontend
+    cd "$FRONTEND_DIR"
     npm install > /dev/null 2>&1
     if [ $? -eq 0 ]; then
         echo -e "${GREEN}✅ Node.js dependencies installed${NC}"
@@ -113,16 +117,14 @@ if [ ! -d "react-frontend/node_modules" ]; then
         echo -e "${RED}❌ Failed to install Node.js dependencies${NC}"
         exit 1
     fi
-    cd ..
 else
     echo -e "${GREEN}✅ Node.js dependencies already installed${NC}"
 fi
 
 # Start backend server
 echo -e "${BLUE}🔧 Starting FastAPI backend server...${NC}"
-cd backend && source venv/bin/activate && uvicorn main:app --reload --host 0.0.0.0 --port 8000 > ../backend.log 2>&1 &
+cd "$BACKEND_DIR" && source venv/bin/activate && uvicorn main:app --reload --host 0.0.0.0 --port 8000 > "$BASE_DIR/backend.log" 2>&1 &
 BACKEND_PID=$!
-cd ..
 
 # Wait for backend to start
 echo -e "${YELLOW}⏳ Waiting for backend to start...${NC}"
@@ -134,7 +136,7 @@ for i in {1..30}; do
     if [ $i -eq 30 ]; then
         echo -e "${RED}❌ Backend server failed to start${NC}"
         echo -e "${YELLOW}📋 Backend logs:${NC}"
-        tail -n 20 backend.log
+        tail -n 20 "$BASE_DIR/backend.log"
         cleanup
         exit 1
     fi
@@ -143,10 +145,9 @@ done
 
 # Start frontend server
 echo -e "${BLUE}🎨 Starting React frontend server...${NC}"
-cd react-frontend
-npm run dev > ../frontend.log 2>&1 &
+cd "$FRONTEND_DIR"
+npm run dev > "$BASE_DIR/frontend.log" 2>&1 &
 FRONTEND_PID=$!
-cd ..
 
 # Wait for frontend to start
 echo -e "${YELLOW}⏳ Waiting for frontend to start...${NC}"
@@ -158,7 +159,7 @@ for i in {1..60}; do
     if [ $i -eq 60 ]; then
         echo -e "${RED}❌ Frontend server failed to start${NC}"
         echo -e "${YELLOW}📋 Frontend logs:${NC}"
-        tail -n 20 frontend.log
+        tail -n 20 "$BASE_DIR/frontend.log"
         cleanup
         exit 1
     fi
