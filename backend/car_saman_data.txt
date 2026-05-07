@@ -1,0 +1,116 @@
+# CAR SUMMONS DATA (SAMAN KERETA)
+# Format: PLATE_NUMBER | OWNER_NAME | IC_NUMBER | CAR_TYPE | TOTAL_SAMAN | UNPAID_SAMAN | OUTSTANDING_AMOUNT | summon_details
+# =====================================================================================================================
+
+VMX7352 | AHMAD BIN IBRAHIM | 801203-10-1234 | Proton Saga | 5 | 2 | RM450 | 2024-01-15: Lompat lampu merah (RM150), 2024-02-20: Parkir tidak sah (RM50), 2024-03-10: Pecut (RM200), 2024-04-05: Tidak pakai seatbelt (RM100), 2024-05-12: Gagal pamer cukai jalan (RM100)
+
+WVA1234 | TAN SIEW MING | 850312-14-5678 | Perodua Myvi | 3 | 1 | RM200 | 2024-01-20: Melebihi had laju 30km/j (RM150), 2024-02-15: Gagal pamer cukai jalan (RM100), 2024-03-25: Parkir tidak sah (RM50)
+
+ABC1234 | AHMAD FAIZAL BIN ZAINUDDIN | 790105-10-9876 | Honda Civic | 7 | 4 | RM850 | 2024-01-05: Lompat lampu merah (RM150), 2024-02-10: Pecut (RM200), 2024-03-15: Parkir tidak sah (RM50), 2024-04-20: Tidak pakai seatbelt (RM100), 2024-05-25: Gagal pamer cukai jalan (RM100), 2024-06-30: Melebihi had laju 50km/j (RM200), 2024-07-10: Gagal berhenti fully (RM150)
+
+DEF5678 | WONG MEI LING | 820420-12-3456 | Toyota Vios | 2 | 0 | RM0 | 2024-01-12: Parkir tidak sah (RM50), 2024-02-28: Gagal pamer cukai jalan (RM100)
+
+GHI9012 | MOHAMAD FARIS BIN RAHIM | 880805-08-7890 | Proton Persona | 4 | 2 | RM350 | 2024-01-18: Lompat lampu merah (RM150), 2024-03-05: Pecut (RM200), 2024-04-12: Tidak pakai helmet (RM100), 2024-05-20: Gagal pamer cukai jalan (RM100)
+
+JKL3456 | LIM JIA JUN | 910203-10-2345 | Perodua Axia | 1 | 0 | RM0 | 2024-02-01: Parkir tidak sah (RM50)
+
+MNO7890 | NURUL AISHA BINTI HASSAN | 860718-14-6789 | Proton Iriz | 6 | 3 | RM600 | 2024-01-25: Lompat lampu merah (RM150), 2024-02-14: Melebihi had laju 30km/j (RM150), 2024-03-20: Pecut (RM200), 2024-04-18: Parkir tidak sah (RM50), 2024-05-22: Gagal pamer cukai jalan (RM100), 2024-06-15: Tidak pakai seatbelt (RM100)
+
+PQR1234 | CHUA KOK MING | 830512-10-4567 | Honda City | 3 | 1 | RM200 | 2024-01-30: Pecut (RM200), 2024-03-10: Gagal pamer cukai jalan (RM100), 2024-04-25: Parkir tidak sah (RM50)
+
+STU5678 | ABDULLAH BIN OMAR | 800910-12-8901 | Perodua Bezza | 4 | 2 | RM400 | 2024-02-05: Lompat lampu merah (RM150), 2024-03-15: Pecut (RM200), 2024-04-22: Gagal pamer cukai jalan (RM100), 2024-05-30: Parkir tidak sah (RM50)
+
+VWX9012 | SARAH BINTI AHMAD | 870625-08-2345 | Toyota Yaris | 2 | 1 | RM150 | 2024-02-08: Melebihi had laju 30km/j (RM150), 2024-03-18: Gagal pamer cukai jalan (RM100)
+
+YZA3456 | TEO CHIN Huat | 900320-10-6789 | Perodua Alza | 5 | 3 | RM550 | 2024-01-15: Lompat lampu merah (RM150), 2024-02-20: Pecut (RM200), 2024-03-25: Parkir tidak sah (RM50), 2024-04-30: Gagal pamer cukai jalan (RM100), 2024-05-10: Tidak pakai seatbelt (RM100)
+
+BCD7890 | NORAZLIN BINTI MOHAMAD | 850808-14-1234 | Proton Exora | 3 | 1 | RM250 | 2024-02-12: Pecut (RM200), 2024-03-20: Gagal pamer cukai jalan (RM100), 2024-04-28: Parkir tidak sah (RM50)
+
+EFG1234 | LEE KANG WEI | 920415-10-5678 | Perodua Myvi | 6 | 4 | RM750 | 2024-01-20: Lompat lampu merah (RM150), 2024-02-25: Pecut (RM200), 2024-03-30: Melebihi had laju 30km/j (RM150), 2024-04-15: Gagal pamer cukai jalan (RM100), 2024-05-20: Parkir tidak sah (RM50), 2024-06-25: Tidak pakai seatbelt (RM100)
+
+HIJ5678 | ZAINAB BINTI YUSOF | 810203-12-9012 | Honda Accord | 2 | 0 | RM0 | 2024-02-18: Parkir tidak sah (RM50), 2024-03-22: Gagal pamer cukai jalan (RM100)
+
+KLM9012 | TAN KOK SENG | 890710-08-3456 | Perodua Viva | 4 | 2 | RM350 | 2024-01-28: Lompat lampu merah (RM150), 2024-03-05: Pecut (RM200), 2024-04-12: Gagal pamer cukai jalan (RM100), 2024-05-18: Parkir tidak sah (RM50)
+
+NOP3456 | SITI NORAINI BINTI AHMAD | 860915-10-7890 | Proton Waja | 3 | 1 | RM200 | 2024-02-22: Pecut (RM200), 2024-03-28: Gagal pamer cukai jalan (RM100), 2024-05-02: Parkir tidak sah (RM50)
+
+QRS7890 | CHEE MING CHONG | 900525-14-2345 | Perodua Kancil | 7 | 5 | RM950 | 2024-01-10: Lompat lampu merah (RM150), 2024-02-15: Pecut (RM200), 2024-03-20: Melebihi had laju 50km/j (RM200), 2024-04-25: Parkir tidak sah (RM50), 2024-05-30: Gagal pamer cukai jalan (RM100), 2024-06-05: Tidak pakai seatbelt (RM100), 2024-07-10: Gagal berhenti fully (RM150)
+
+TUV1234 | MAZLINA BINTI ZAINAL | 830410-10-6789 | Toyota Avanza | 2 | 0 | RM0 | 2024-02-28: Gagal pamer cukai jalan (RM100), 2024-04-05: Parkir tidak sah (RM50)
+
+WXY5678 | FONG CHAI HONG | 910820-12-1234 | Perodua Axia | 5 | 3 | RM550 | 2024-01-15: Lompat lampu merah (RM150), 2024-02-20: Pecut (RM200), 2024-03-25: Gagal pamer cukai jalan (RM100), 2024-04-30: Parkir tidak sah (RM50), 2024-05-08: Tidak pakai seatbelt (RM100)
+
+ZAB9012 | MOHD FAIZAL BIN JUSOH | 880305-08-5678 | Proton Saga | 4 | 2 | RM400 | 2024-02-10: Lompat lampu merah (RM150), 2024-03-15: Pecut (RM200), 2024-04-20: Gagal pamer cukai jalan (RM100), 2024-05-25: Parkir tidak sah (RM50)
+
+CDE3456 | YEOH KIM LENG | 850720-10-9012 | Perodua Myvi | 3 | 1 | RM200 | 2024-01-25: Pecut (RM200), 2024-03-10: Gagal pamer cukai jalan (RM100), 2024-04-15: Parkir tidak sah (RM50)
+
+FGH7890 | NUR HIDAYAH BINTI SALLEH | 920105-14-3456 | Proton Persona | 6 | 4 | RM750 | 2024-01-05: Lompat lampu merah (RM150), 2024-02-10: Pecut (RM200), 2024-03-15: Melebihi had laju 30km/j (RM150), 2024-04-20: Gagal pamer cukai jalan (RM100), 2024-05-25: Parkir tidak sah (RM50), 2024-06-30: Tidak pakai seatbelt (RM100)
+
+IJK1234 | TAN HOCK LEONG | 800818-10-7890 | Honda CR-V | 2 | 0 | RM0 | 2024-02-15: Parkir tidak sah (RM50), 2024-03-20: Gagal pamer cukai jalan (RM100)
+
+LMN5678 | ROHANA BINTI IBRAHIM | 870425-12-2345 | Perodua Bezza | 4 | 2 | RM350 | 2024-01-20: Lompat lampu merah (RM150), 2024-03-05: Pecut (RM200), 2024-04-12: Gagal pamer cukai jalan (RM100), 2024-05-18: Parkir tidak sah (RM50)
+
+OPQ9012 | CHOW YUEN PAU | 910612-08-6789 | Toyota Corolla | 3 | 1 | RM200 | 2024-02-25: Pecut (RM200), 2024-04-10: Gagal pamer cukai jalan (RM100), 2024-05-15: Parkir tidak sah (RM50)
+
+RST3456 | NORLIZAN BIN MANSOR | 860208-10-1234 | Perodua Alza | 5 | 3 | RM550 | 2024-01-30: Lompat lampu merah (RM150), 2024-02-28: Pecut (RM200), 2024-04-05: Gagal pamer cukai jalan (RM100), 2024-05-12: Parkir tidak sah (RM50), 2024-06-18: Tidak pakai seatbelt (RM100)
+
+TUV9012 | ANGELINA TAN | 890915-14-5678 | Proton Iriz | 2 | 0 | RM0 | 2024-03-08: Gagal pamer cukai jalan (RM100), 2024-04-15: Parkir tidak sah (RM50)
+
+WXY1234 | MOHD HAFIZ BIN AHMAD | 830720-10-9012 | Perodua Myvi | 6 | 4 | RM750 | 2024-01-12: Lompat lampu merah (RM150), 2024-02-18: Pecut (RM200), 2024-03-25: Melebihi had laju 30km/j (RM150), 2024-04-30: Gagal pamer cukai jalan (RM100), 2024-05-08: Parkir tidak sah (RM50), 2024-06-12: Tidak pakai seatbelt (RM100)
+
+ZAB3456 | GOH SIEW LIAN | 920303-12-3456 | Perodua Axia | 3 | 1 | RM200 | 2024-02-20: Pecut (RM200), 2024-03-28: Gagal pamer cukai jalan (RM100), 2024-05-05: Parkir tidak sah (RM50)
+
+CDE7890 | AHMAD KHAIRUL BIN ANWAR | 850818-08-7890 | Proton Waja | 4 | 2 | RM400 | 2024-01-25: Lompat lampu merah (RM150), 2024-03-10: Pecut (RM200), 2024-04-18: Gagal pamer cukai jalan (RM100), 2024-05-22: Parkir tidak sah (RM50)
+
+FGH1234 | TAN SIEW LING | 880505-10-2345 | Perodua Viva | 2 | 0 | RM0 | 2024-02-12: Gagal pamer cukai jalan (RM100), 2024-03-20: Parkir tidak sah (RM50)
+
+HIJ5678 | MOHD NAIM BIN HASSAN | 910210-14-6789 | Proton Exora | 5 | 3 | RM550 | 2024-01-18: Lompat lampu merah (RM150), 2024-02-25: Pecut (RM200), 2024-04-02: Gagal pamer cukai jalan (RM100), 2024-05-10: Parkir tidak sah (RM50), 2024-06-15: Tidak pakai seatbelt (RM100)
+
+JKL9012 | WONG POH YING | 860730-10-1234 | Perodua Myvi | 3 | 1 | RM250 | 2024-02-05: Pecut (RM200), 2024-03-15: Gagal pamer cukai jalan (RM100), 2024-04-22: Parkir tidak sah (RM50)
+
+MNO3456 | SHUKRI BIN YUSOF | 900415-12-5678 | Perodua Alza | 4 | 2 | RM350 | 2024-01-28: Lompat lampu merah (RM150), 2024-03-05: Pecut (RM200), 2024-04-12: Gagal pamer cukai jalan (RM100), 2024-05-18: Parkir tidak sah (RM50)
+
+PQR7890 | NURUL HUDA BINTI OMAR | 830908-08-9012 | Proton Saga | 6 | 4 | RM750 | 2024-01-10: Lompat lampu merah (RM150), 2024-02-15: Pecut (RM200), 2024-03-20: Melebihi had laju 30km/j (RM150), 2024-04-25: Gagal pamer cukai jalan (RM100), 2024-05-30: Parkir tidak sah (RM50), 2024-06-05: Tidak pakai seatbelt (RM100)
+
+STU1234 | LEE CHIN WEI | 920520-10-3456 | Perodua Axia | 2 | 0 | RM0 | 2024-02-22: Gagal pamer cukai jalan (RM100), 2024-04-05: Parkir tidak sah (RM50)
+
+VWX5678 | ABDUL RAHMAN BIN MOHAMED | 870215-14-7890 | Perodua Bezza | 5 | 3 | RM550 | 2024-01-15: Lompat lampu merah (RM150), 2024-02-20: Pecut (RM200), 2024-03-25: Gagal pamer cukai jalan (RM100), 2024-04-30: Parkir tidak sah (RM50), 2024-05-08: Tidak pakai seatbelt (RM100)
+
+YZA9012 | CHIA SIEW MEI | 890810-10-2345 | Proton Persona | 3 | 1 | RM200 | 2024-02-28: Pecut (RM200), 2024-04-10: Gagal pamer cukai jalan (RM100), 2024-05-15: Parkir tidak sah (RM50)
+
+BCD1234 | MOHD ASHRAF BIN ZAINUDDIN | 910105-12-6789 | Perodua Myvi | 4 | 2 | RM400 | 2024-01-20: Lompat lampu merah (RM150), 2024-03-05: Pecut (RM200), 2024-04-12: Gagal pamer cukai jalan (RM100), 2024-05-18: Parkir tidak sah (RM50)
+
+EFG5678 | TAN YONG MING | 850925-08-1234 | Perodua Viva | 7 | 5 | RM950 | 2024-01-05: Lompat lampu merah (RM150), 2024-02-10: Pecut (RM200), 2024-03-15: Melebihi had laju 50km/j (RM200), 2024-04-20: Gagal pamer cukai jalan (RM100), 2024-05-25: Parkir tidak sah (RM50), 2024-06-30: Tidak pakai seatbelt (RM100), 2024-07-10: Gagal berhenti fully (RM150)
+
+HIJ9012 | NORSHAFINA BINTI JOHARI | 880320-10-5678 | Proton Iriz | 2 | 0 | RM0 | 2024-02-15: Gagal pamer cukai jalan (RM100), 2024-03-22: Parkir tidak sah (RM50)
+
+KLM3456 | CHEW KOK SING | 920718-14-9012 | Perodua Alza | 5 | 3 | RM550 | 2024-01-25: Lompat lampu merah (RM150), 2024-02-28: Pecut (RM200), 2024-04-05: Gagal pamer cukai jalan (RM100), 2024-05-12: Parkir tidak sah (RM50), 2024-06-18: Tidak pakai seatbelt (RM100)
+
+NOP7890 | SITI ZAHRA BINTI HASSAN | 860512-10-3456 | Perodua Myvi | 3 | 1 | RM200 | 2024-02-08: Pecut (RM200), 2024-03-18: Gagal pamer cukai jalan (RM100), 2024-04-25: Parkir tidak sah (RM50)
+
+QRS1234 | TAN BEE HONG | 900820-12-7890 | Perodua Axia | 4 | 2 | RM350 | 2024-01-30: Lompat lampu merah (RM150), 2024-03-10: Pecut (RM200), 2024-04-15: Gagal pamer cukai jalan (RM100), 2024-05-20: Parkir tidak sah (RM50)
+
+TUV4567 | MOHD FAISAL BIN RAHMAT | 830615-08-2345 | Proton Waja | 6 | 4 | RM750 | 2024-01-12: Lompat lampu merah (RM150), 2024-02-18: Pecut (RM200), 2024-03-25: Melebihi had laju 30km/j (RM150), 2024-04-30: Gagal pamer cukai jalan (RM100), 2024-05-08: Parkir tidak sah (RM50), 2024-06-12: Tidak pakai seatbelt (RM100)
+
+WXY8901 | YAP SIEW LIAN | 910930-10-6789 | Perodua Bezza | 2 | 0 | RM0 | 2024-02-25: Gagal pamer cukai jalan (RM100), 2024-04-10: Parkir tidak sah (RM50)
+
+ZAB2345 | AHMAD SYAFIQ BIN ROSLAN | 880205-14-1234 | Perodua Myvi | 5 | 3 | RM550 | 2024-01-20: Lompat lampu merah (RM150), 2024-02-28: Pecut (RM200), 2024-04-05: Gagal pamer cukai jalan (RM100), 2024-05-12: Parkir tidak sah (RM50), 2024-06-18: Tidak pakai seatbelt (RM100)
+
+CDE6789 | LAW KIM HOEI | 920810-12-5678 | Proton Saga | 3 | 1 | RM200 | 2024-02-12: Pecut (RM200), 2024-03-20: Gagal pamer cukai jalan (RM100), 2024-04-28: Parkir tidak sah (RM50)
+
+FGH0123 | NURUL AFIQAH BINTI AZMAN | 860418-08-9012 | Perodua Viva | 4 | 2 | RM400 | 2024-01-28: Lompat lampu merah (RM150), 2024-03-05: Pecut (RM200), 2024-04-12: Gagal pamer cukai jalan (RM100), 2024-05-18: Parkir tidak sah (RM50)
+
+IJK4567 | TAN HOCK CHUAN | 900105-10-3456 | Perodua Alza | 6 | 4 | RM750 | 2024-01-10: Lompat lampu merah (RM150), 2024-02-15: Pecut (RM200), 2024-03-20: Melebihi had laju 30km/j (RM150), 2024-04-25: Gagal pamer cukai jalan (RM100), 2024-05-30: Parkir tidak sah (RM50), 2024-06-05: Tidak pakai seatbelt (RM100)
+
+LMN8901 | SITI NURBAITI BINTI JAMAL | 880725-14-7890 | Proton Persona | 2 | 0 | RM0 | 2024-02-22: Gagal pamer cukai jalan (RM100), 2024-04-05: Parkir tidak sah (RM50)
+
+OPQ2345 | CHONG WEI JET | 910520-10-2345 | Perodua Axia | 5 | 3 | RM550 | 2024-01-15: Lompat lampu merah (RM150), 2024-02-20: Pecut (RM200), 2024-03-25: Gagal pamer cukai jalan (RM100), 2024-04-30: Parkir tidak sah (RM50), 2024-05-08: Tidak pakai seatbelt (RM100)
+
+RST6789 | MOHD IZZAT BIN KHAIRUDDIN | 850315-12-6789 | Perodua Myvi | 3 | 1 | RM250 | 2024-02-08: Pecut (RM200), 2024-03-18: Gagal pamer cukai jalan (RM100), 2024-04-25: Parkir tidak sah (RM50)
+
+TUV0123 | WONG MEI FONG | 920920-08-1234 | Proton Exora | 4 | 2 | RM350 | 2024-01-25: Lompat lampu merah (RM150), 2024-03-10: Pecut (RM200), 2024-04-18: Gagal pamer cukai jalan (RM100), 2024-05-22: Parkir tidak sah (RM50)
+
+# =====================================================================================================================
+# END OF DATA
+# Total Records: 50
+# =====================================================================================================================

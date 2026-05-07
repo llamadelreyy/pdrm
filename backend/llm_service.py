@@ -1,10 +1,89 @@
 import os
 import json
 import aiohttp
-from typing import Dict, Any, Optional
+import re
+from typing import Dict, Any, Optional, List
 from dotenv import load_dotenv
 
 load_dotenv()
+
+# Global car saman data
+CAR_SAMAN_DATA = {}
+CAR_SAMAN_FILE = "car_saman_data.txt"
+
+def load_car_saman_data():
+    """Load car saman data from text file."""
+    global CAR_SAMAN_DATA
+    try:
+        file_path = os.path.join(os.path.dirname(__file__), CAR_SAMAN_FILE)
+        if os.path.exists(file_path):
+            with open(file_path, 'r', encoding='utf-8') as f:
+                for line in f:
+                    line = line.strip()
+                    # Skip comments and empty lines
+                    if not line or line.startswith('#'):
+                        continue
+                    # Parse the line
+                    parts = line.split('|')
+                    if len(parts) >= 8:
+                        plate = parts[0].strip()
+                        owner = parts[1].strip()
+                        ic = parts[2].strip()
+                        car_type = parts[3].strip()
+                        total_saman = int(parts[4].strip())
+                        unpaid_saman = int(parts[5].strip())
+                        outstanding = parts[6].strip()
+                        details = parts[7].strip()
+                        
+                        CAR_SAMAN_DATA[plate] = {
+                            "owner": owner,
+                            "ic": ic,
+                            "car_type": car_type,
+                            "total_saman": total_saman,
+                            "unpaid_saman": unpaid_saman,
+                            "outstanding": outstanding,
+                            "details": details
+                        }
+            print(f"Loaded {len(CAR_SAMAN_DATA)} car saman records")
+        else:
+            print(f"Car saman data file not found: {file_path}")
+    except Exception as e:
+        print(f"Error loading car saman data: {e}")
+
+def search_car_saman(plate_query: str) -> Optional[Dict[str, Any]]:
+    """Search for car saman data by plate number."""
+    # Normalize the query - remove spaces, uppercase
+    normalized_query = plate_query.replace(" ", "").upper()
+    
+    # Try exact match first
+    if normalized_query in CAR_SAMAN_DATA:
+        return CAR_SAMAN_DATA[normalized_query]
+    
+    # Try partial match
+    for plate, data in CAR_SAMAN_DATA.items():
+        if normalized_query in plate or plate in normalized_query:
+            return data
+    
+    return None
+
+def extract_plate_from_message(message: str) -> Optional[str]:
+    """Extract license plate number from user message."""
+    # Common Malaysian plate patterns
+    patterns = [
+        r'([A-Z]{2,3}\s*\d{3,4}\s*[A-Z]?)',  # e.g., VMX 7352, ABC 1234
+        r'([A-Z]{2,3}\d{3,4})',  # e.g., VMX7352
+    ]
+    
+    message_upper = message.upper()
+    for pattern in patterns:
+        match = re.search(pattern, message_upper)
+        if match:
+            return match.group(1).replace(" ", "")
+    
+    return None
+
+# Load car saman data on module import
+load_car_saman_data()
 
 class LLMService:
     def __init__(self):
@@ -288,6 +367,43 @@ Penemuan Utama:
             "supporting_evidence": mock_evidence
         }
     
+    def _build_saman_context(self, message: str) -> str:
+        """Build saman context from the message if a plate number is detected."""
+        plate = extract_plate_from_message(message)
+        if not plate:
+            return ""
+        
+        saman_data = search_car_saman(plate)
+        if not saman_data:
+            return ""
+        
+        context = f"""
+        
+        === DATA SAMAN KENDERAAN ===
+        Nombor Plat: {plate}
+        Nama Pemilik: {saman_data['owner']}
+        No. IC: {saman_data['ic']}
+        Jenis Kereta: {saman_data['car_type']}
+        Jumlah Saman: {saman_data['total_saman']}
+        Saman Belum Bayar: {saman_data['unpaid_saman']}
+        Jumlah Tunggakan: {saman_data['outstanding']}
+        Butiran Saman: {saman_data['details']}
+        
+        GUNAKAN DATA DI ATAS UNTUK MENJAWAB SOALAN MENGENAI SAMAN KENDERAAN INI.
+        """
+        return context
+    
+    def _get_system_prompt(self, message: str) -> str:
+        """Get the appropriate system prompt, including saman data if relevant."""
+        base_prompt = "Anda adalah pembantu AI untuk sistem laporan kemalangan PDRM. Anda membantu pengguna dengan pertanyaan tentang laporan kemalangan, proses tuntutan insurans, dan sebarang pertanyaan berkaitan. Berikan jawapan yang jelas, tepat, dan dalam Bahasa Melayu apabila mungkin. Anda adalah pembantu yang mesra dan profesional."
+        
+        # Add saman context if plate number is detected
+        saman_context = self._build_saman_context(message)
+        if saman_context:
+            base_prompt = base_prompt + saman_context
+        
+        return base_prompt
+    
     async def chat(self, message: str, conversation_history: list = None) -> str:
         """
         General chat endpoint for AI conversations.
@@ -309,7 +425,7 @@ Penemuan Utama:
             messages = [
                 {
                     "role": "system",
-                    "content": "Anda adalah pembantu AI untuk sistem laporan kemalangan PDRM. Anda membantu pengguna dengan pertanyaan tentang laporan kemalangan, proses tuntutan insurans, dan sebarang pertanyaan berkaitan. Berikan jawapan yang jelas, tepat, dan dalam Bahasa Melayu apabila mungkin. Anda adalah pembantu yang mesra dan profesional."
+                    "content": self._get_system_prompt(message)
                 }
             ]
             
@@ -369,7 +485,7 @@ Penemuan Utama:
             messages = [
                 {
                     "role": "system",
-                    "content": "Anda adalah pembantu AI untuk sistem laporan kemalangan PDRM. Anda membantu pengguna dengan pertanyaan tentang laporan kemalangan, proses tuntutan insurans, dan sebarang pertanyaan berkaitan. Berikan jawapan yang jelas, tepat, dan dalam Bahasa Melayu apabila mungkin. Anda adalah pembantu yang mesra dan profesional."
+                    "content": self._get_system_prompt(message)
                 }
             ]
             
