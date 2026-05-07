@@ -1,6 +1,17 @@
 import { useState, useEffect, useRef } from "react";
 import { PaperPlaneIcon, UserCircleIcon, BoltIcon } from "../icons";
 
+// Simple helper to render **bold** text only
+const renderBoldText = (text: string) => {
+  const parts = text.split(/(\*\*[^*]+\*\*)/g);
+  return parts.map((part, i) => {
+    if (part.startsWith('**') && part.endsWith('**')) {
+      return <strong key={i} className="font-semibold">{part.slice(2, -2)}</strong>;
+    }
+    return part;
+  });
+};
+
 interface Message {
   id: string;
   role: "user" | "assistant";
@@ -141,9 +152,9 @@ export default function Chat() {
   };
 
   return (
-    <div className="flex flex-col h-[calc(100vh-8rem)]">
+    <div className="flex flex-col h-[calc(100vh-8rem)] overflow-hidden">
       {/* Header */}
-      <div className="mb-4">
+      <div className="mb-4 flex-shrink-0">
         <h1 className="text-2xl font-semibold text-gray-800 dark:text-white/90">
           AI Chat
         </h1>
@@ -153,7 +164,7 @@ export default function Chat() {
       </div>
 
       {/* Chat Container */}
-      <div className="flex-1 flex flex-col bg-white border border-gray-200 rounded-xl dark:border-gray-800 dark:bg-gray-dark">
+      <div className="flex-1 flex flex-col bg-white border border-gray-200 rounded-xl dark:border-gray-800 dark:bg-gray-dark min-h-0">
         {/* Messages Area */}
         <div className="flex-1 overflow-y-auto p-4 space-y-4 no-scrollbar">
           {messages.length === 0 && (
@@ -186,11 +197,15 @@ export default function Chat() {
               <div
                 className={`max-w-[70%] rounded-xl px-4 py-3 ${
                   message.role === "user"
-                    ? "bg-primary-500 text-gray-800 dark:text-white rounded-br-none"
+                    ? "bg-primary-500 text-gray-800 dark:bg-primary-600 dark:text-white rounded-br-none"
                     : "bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-white/90 rounded-bl-none"
                 }`}
               >
-                <p className="text-sm whitespace-pre-wrap">{message.content}</p>
+                <p className="text-sm whitespace-pre-wrap">
+                  {message.role === "assistant"
+                    ? renderBoldText(message.content)
+                    : message.content}
+                </p>
                 {message.content && (
                   <p
                     className={`text-xs mt-1 ${
@@ -234,7 +249,7 @@ export default function Chat() {
         </div>
 
         {/* Input Area */}
-        <form onSubmit={handleSubmit} className="p-4 border-t border-gray-200 dark:border-gray-800">
+        <form onSubmit={handleSubmit} className="p-4 border-t border-gray-200 dark:border-gray-800 flex-shrink-0">
           <div className="flex gap-3">
             <input
               type="text"
