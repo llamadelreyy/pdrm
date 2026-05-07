@@ -10,8 +10,8 @@ export default function Home() {
   return (
     <>
       <PageMeta
-        title="PDRM Traffic Enforcement Dashboard"
-        description="PDRM Traffic Enforcement Dashboard - Monitoring saman issuance, vehicle records, JPJ integration, and enforcement operations"
+        title="Papan Pemuka Penguatkuasaan Trafik PDRM"
+        description="Papan Pemuka Penguatkuasaan Trafik PDRM - Pemantauan pengeluaran saman, rekod kenderaan, integrasi JPJ, dan operasi penguatkuasaan"
       />
       <div className="grid grid-cols-12 gap-4 md:gap-6">
         {/* Top Row: Metrics - Full Width */}

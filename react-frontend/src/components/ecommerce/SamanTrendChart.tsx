@@ -87,7 +87,7 @@ export default function SamanTrendChart() {
   };
   const series = [
     {
-      name: "Saman Issued",
+      name: "Saman Dikeluarkan",
       data: [168, 385, 201, 298, 187, 195, 291, 110, 215, 390, 280, 112],
     },
   ];
@@ -106,10 +106,10 @@ export default function SamanTrendChart() {
       <div className="flex flex-col gap-2 mb-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h3 className="text-lg font-semibold text-gray-800 dark:text-white/90">
-            Monthly Saman Trend
+            Trend Saman Bulanan
           </h3>
           <p className="mt-1 text-gray-500 text-theme-sm dark:text-gray-400">
-            Saman issued per month in 2024
+            Saman dikeluarkan setiap bulan pada tahun 2024
           </p>
         </div>
         <div className="flex items-center gap-3">
@@ -126,13 +126,13 @@ export default function SamanTrendChart() {
                 onItemClick={closeDropdown}
                 className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
               >
-                View More
-              </DropdownItem>
-              <DropdownItem
-                onItemClick={closeDropdown}
-                className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
-              >
-                Delete
+                Lihat Lagi
+            </DropdownItem>
+            <DropdownItem
+              onItemClick={closeDropdown}
+              className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
+            >
+              Padam
               </DropdownItem>
             </Dropdown>
           </div>

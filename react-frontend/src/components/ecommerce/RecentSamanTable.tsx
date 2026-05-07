@@ -77,10 +77,10 @@ export default function RecentSamanTable() {
       <div className="flex flex-col gap-2 mb-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h3 className="text-lg font-semibold text-gray-800 dark:text-white/90">
-            Recent Saman Issued
+            Saman Terbaru Dikeluarkan
           </h3>
           <p className="mt-1 text-gray-500 text-theme-sm dark:text-gray-400">
-            Latest traffic violations recorded
+            Pelanggaran trafik terkini direkodkan
           </p>
         </div>
 
@@ -123,7 +123,7 @@ export default function RecentSamanTable() {
                 strokeLinejoin="round"
               />
             </svg>
-            Filter
+            Tapis
           </button>
         </div>
       </div>
@@ -136,31 +136,31 @@ export default function RecentSamanTable() {
                 isHeader
                 className="py-3 font-semibold text-gray-800 dark:text-white/90"
               >
-                Plate Number
+                Nombor Plat
               </TableCell>
               <TableCell
                 isHeader
                 className="py-3 font-semibold text-gray-800 dark:text-white/90"
               >
-                Driver Name
+                Nama Pemandu
               </TableCell>
               <TableCell
                 isHeader
                 className="py-3 font-semibold text-gray-800 dark:text-white/90"
               >
-                Offense
+                Pelanggaran
               </TableCell>
               <TableCell
                 isHeader
                 className="py-3 font-semibold text-gray-800 dark:text-white/90"
               >
-                Location
+                Lokasi
               </TableCell>
               <TableCell
                 isHeader
                 className="py-3 font-semibold text-gray-800 dark:text-white/90"
               >
-                Amount
+                Jumlah
               </TableCell>
               <TableCell
                 isHeader

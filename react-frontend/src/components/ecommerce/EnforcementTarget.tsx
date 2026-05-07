@@ -69,10 +69,10 @@ export default function EnforcementTarget() {
         <div className="flex justify-between">
           <div>
             <h3 className="text-lg font-semibold text-gray-800 dark:text-white/90">
-              Monthly Target
+              Sasaran Bulanan
             </h3>
             <p className="mt-1 text-gray-500 text-theme-sm dark:text-gray-400">
-              Enforcement target achievement
+              Pencapaian sasaran penguatkuasaan
             </p>
           </div>
           <div className="relative inline-block">
@@ -88,13 +88,13 @@ export default function EnforcementTarget() {
                 onItemClick={closeDropdown}
                 className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
               >
-                View More
-              </DropdownItem>
-              <DropdownItem
-                onItemClick={closeDropdown}
-                className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
-              >
-                Delete
+                Lihat Lagi
+            </DropdownItem>
+            <DropdownItem
+              onItemClick={closeDropdown}
+              className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
+            >
+              Padam
               </DropdownItem>
             </Dropdown>
           </div>
@@ -102,7 +102,7 @@ export default function EnforcementTarget() {
         <div className="flex flex-col items-center justify-center h-[280px]">
           <Chart options={options} series={series} type="radialBar" />
           <p className="mt-4 text-center text-gray-500 text-theme-sm dark:text-gray-400">
-            Target: 1,500 saman/month
+            Sasaran: 1,500 saman/bulan
           </p>
         </div>
       </div>

@@ -112,11 +112,11 @@ export default function EnforcementStatsChart() {
 
   const series = [
     {
-      name: "Traffic Cases",
+      name: "Kes Trafik",
       data: [168, 385, 201, 298, 187, 195, 291, 110, 215, 390, 280, 112],
     },
     {
-      name: "Saman Issued",
+      name: "Saman Dikeluarkan",
       data: [128, 305, 151, 248, 147, 155, 231, 90, 175, 320, 220, 92],
     },
   ];
@@ -126,10 +126,10 @@ export default function EnforcementStatsChart() {
       <div className="flex flex-col gap-2 mb-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h3 className="text-lg font-semibold text-gray-800 dark:text-white/90">
-            Enforcement Statistics
+            Statistik Penguatkuasaan
           </h3>
           <p className="mt-1 text-gray-500 text-theme-sm dark:text-gray-400">
-            Traffic cases vs saman issued comparison
+            Perbandingan kes trafik vs saman dikeluarkan
           </p>
         </div>
         <div className="flex items-center gap-3">
@@ -137,7 +137,7 @@ export default function EnforcementStatsChart() {
             <input
               ref={datePickerRef}
               className="input input-bordered input-sm w-44"
-              placeholder="Select date"
+              placeholder="Pilih tarikh"
             />
           </div>
           <ChartTab />
