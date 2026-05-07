@@ -337,6 +337,123 @@ class VLMService:
         except Exception as e:
             print(f"Error in analyze_accident_image: {str(e)}")
             return await self._mock_image_analysis()
+
+    async def analyze_plate_number(self, image_path: str) -> Dict[str, Any]:
+        """
+        Analyze a vehicle image to extract the license plate number.
+        Used for traffic fine checking (Semakan Saman).
+        """
+        try:
+            # Encode the image
+            encoded_image = await self.encode_image_to_base64(image_path)
+            
+            # Create prompt for plate number extraction
+            analysis_prompt = """
+            ANALISIS GAMBAR KENDERAAN UNTUK PENGAMBILAN NOMBOR PLAT
+            
+            Sila analisis foto kenderaan ini dan berikan maklumat berikut DALAM BAHASA MELAYU:
+            
+            1. NOMBOR PLAT: Nombor plat kenderaan yang kelihatan dalam foto (format: ABC 1234)
+            2. JENIS KENDERAAN: Jenis kenderaan (kereta, van, lori, motosikal, dll.)
+            3. WARNA KENDERAAN: Warna badan kenderaan
+            4. TARIKH TAMAT PENDAFTARAN: Tarikh tamat pendaftaran (jika boleh dikenal pasti dari sticker)
+            5. STATUS CUKAI JALAN: Status cukai jalan berdasarkan sticker (jika ada)
+            
+            BERIKAN RESPONS DALAM FORMAT BERIKUT (SAHAJA, TANPA PENJELASAN TAMBAHAN):
+            
+            PLAT: [nombor plat]
+            JENIS: [jenis kenderaan]
+            WARNA: [warna kenderaan]
+            TAMAT: [tarikh tamat pendaftaran atau "Tidak dapat dikenal pasti"]
+            CUKAI: [status cukai jalan atau "Tidak dapat dikenal pasti"]
+            """
+            
+            # Use actual VLM API if available, otherwise fall back to mock
+            if self.api_url and "localhost:11434" in self.api_url:
+                result = await self._call_ollama_api([encoded_image], analysis_prompt)
+            elif self.api_key and self.api_key != "your-vlm-api-key-here":
+                result = await self._call_image_vlm_api([encoded_image], analysis_prompt)
+                result = self._parse_plate_response(result.get("incident_description", ""))
+            else:
+                result = await self._mock_plate_analysis()
+            
+            return result
+            
+        except Exception as e:
+            print(f"Error in analyze_plate_number: {str(e)}")
+            return await self._mock_plate_analysis()
+
+    async def analyze_license(self, image_path: str) -> Dict[str, Any]:
+        """
+        Analyze a driver license image to extract driver information.
+        Used for traffic fine checking (Semakan Saman).
+        """
+        try:
+            # Encode the image
+            encoded_image = await self.encode_image_to_base64(image_path)
+            
+            # Create prompt for license extraction
+            analysis_prompt = """
+            ANALISIS GAMBAR LESEN MEMANDU UNTUK PENGAMBILAN MAKLUMAT PEMANDU
+            
+            Sila analisis foto lesen memandu ini dan berikan maklumat berikut DALAM BAHASA MELAYU:
+            
+            1. NAMA: Nama penuh pemandu seperti yang tertera pada lesen
+            2. NO. IC: Nombor kad pengenalan pemandu
+            3. NO. LESEN: Nombor lesen memandu
+            4. WARGANEGARA: Kewarganegaraan pemandu
+            5. KELAS: Kelas lesen memandu (cth: B2, B, D, dll.)
+            6. TAMAT: Tarikh tamat tempoh lesen
+            7. ALAMAT: Alamat pemandu seperti yang tertera
+            
+            BERIKAN RESPONS DALAM FORMAT BERIKUT (SAHAJA, TANPA PENJELASAN TAMBAHAN):
+            
+            NAMA: [nama penuh]
+            IC: [nombor IC]
+            LESEN: [nombor lesen]
+            WARGANEGARA: [kewarganegaraan]
+            KELAS: [kelas lesen]
+            TAMAT: [tarikh tamat tempoh]
+            ALAMAT: [alamat penuh]
+            """
+            
+            # Use actual VLM API if available, otherwise fall back to mock
+            if self.api_url and "localhost:11434" in self.api_url:
+                result = await self._call_ollama_api([encoded_image], analysis_prompt)
+            elif self.api_key and self.api_key != "your-vlm-api-key-here":
+                result = await self._call_image_vlm_api([encoded_image], analysis_prompt)
+                result = self._parse_license_response(result.get("incident_description", ""))
+            else:
+                result = await self._mock_license_analysis()
+            
+            return result
+            
+        except Exception as e:
+            print(f"Error in analyze_license: {str(e)}")
+            return await self._mock_license_analysis()
+
+    async def _mock_plate_analysis(self) -> Dict[str, Any]:
+        """Mock plate analysis for development purposes."""
+        return {
+            "plate_number": "WVA 1234",
+            "vehicle_type": "Kereta penumpang",
+            "vehicle_color": "Putih",
+            "registration_expiry": "Tidak dapat dikenal pasti",
+            "road_tax_status": "Tidak dapat dikenal pasti",
+            "confidence_score": 0.85
+        }
+    
+    async def _mock_license_analysis(self) -> Dict[str, Any]:
+        """Mock license analysis for development purposes."""
+        return {
+            "name": "AHMAD BIN IBRAHIM",
+            "ic_number": "801234-12-5678",
+            "license_number": "L1234567",
+            "nationality": "MALAYSIA",
+            "class": "B2 - Motokar",
+            "expiry_date": "2030-12-31",
+            "address": "No. 123, Jalan Melati, Taman Sri Skudai, 81300 Skudai, Johor"
+        }
     
     async def _mock_image_analysis(self) -> Dict[str, Any]:
         """Mock image analysis for development purposes."""
@@ -436,6 +553,113 @@ class VLMService:
             "damage_description": damage_description,
             "incident_description": incident_description,
             "confidence_score": 0.8
+        }
+    
+    def _parse_plate_response(self, response_text: str) -> Dict[str, Any]:
+        """Parse VLM response to extract plate number information."""
+        import re
+        
+        plate_number = ""
+        vehicle_type = ""
+        vehicle_color = ""
+        registration_expiry = "Tidak dapat dikenal pasti"
+        road_tax_status = "Tidak dapat dikenal pasti"
+        
+        # Extract plate number
+        plate_match = re.search(r'PLAT:\s*(.+?)(?=\n|JENIS:|$)', response_text, re.IGNORECASE)
+        if plate_match:
+            plate_number = plate_match.group(1).strip()
+        
+        # Extract vehicle type
+        type_match = re.search(r'JENIS:\s*(.+?)(?=\n|WARNA:|$)', response_text, re.IGNORECASE)
+        if type_match:
+            vehicle_type = type_match.group(1).strip()
+        
+        # Extract vehicle color
+        color_match = re.search(r'WARNA:\s*(.+?)(?=\n|TAMAT:|$)', response_text, re.IGNORECASE)
+        if color_match:
+            vehicle_color = color_match.group(1).strip()
+        
+        # Extract registration expiry
+        expiry_match = re.search(r'TAMAT:\s*(.+?)(?=\n|CUKAI:|$)', response_text, re.IGNORECASE)
+        if expiry_match:
+            registration_expiry = expiry_match.group(1).strip()
+        
+        # Extract road tax status
+        tax_match = re.search(r'CUKAI:\s*(.+?)(?=\n|$)', response_text, re.IGNORECASE)
+        if tax_match:
+            road_tax_status = tax_match.group(1).strip()
+        
+        # If parsing failed, try to find plate number pattern
+        if not plate_number:
+            plate_pattern = re.search(r'([A-Z]{1,3}\s?\d{1,4}\s?[A-Z]{0,3})', response_text)
+            if plate_pattern:
+                plate_number = plate_pattern.group(1).strip()
+        
+        return {
+            "plate_number": plate_number,
+            "vehicle_type": vehicle_type,
+            "vehicle_color": vehicle_color,
+            "registration_expiry": registration_expiry,
+            "road_tax_status": road_tax_status,
+            "confidence_score": 0.8
+        }
+    
+    def _parse_license_response(self, response_text: str) -> Dict[str, Any]:
+        """Parse VLM response to extract driver license information."""
+        import re
+        
+        name = ""
+        ic_number = ""
+        license_number = ""
+        nationality = ""
+        license_class = ""
+        expiry_date = ""
+        address = ""
+        
+        # Extract name
+        name_match = re.search(r'NAMA:\s*(.+?)(?=\n|IC:|$)', response_text, re.IGNORECASE)
+        if name_match:
+            name = name_match.group(1).strip()
+        
+        # Extract IC number
+        ic_match = re.search(r'IC:\s*(.+?)(?=\n|LESEN:|$)', response_text, re.IGNORECASE)
+        if ic_match:
+            ic_number = ic_match.group(1).strip()
+        
+        # Extract license number
+        license_match = re.search(r'LESEN:\s*(.+?)(?=\n|WARGANEGARA:|$)', response_text, re.IGNORECASE)
+        if license_match:
+            license_number = license_match.group(1).strip()
+        
+        # Extract nationality
+        nationality_match = re.search(r'WARGANEGARA:\s*(.+?)(?=\n|KELAS:|$)', response_text, re.IGNORECASE)
+        if nationality_match:
+            nationality = nationality_match.group(1).strip()
+        
+        # Extract license class
+        class_match = re.search(r'KELAS:\s*(.+?)(?=\n|TAMAT:|$)', response_text, re.IGNORECASE)
+        if class_match:
+            license_class = class_match.group(1).strip()
+        
+        # Extract expiry date
+        expiry_match = re.search(r'TAMAT:\s*(.+?)(?=\n|ALAMAT:|$)', response_text, re.IGNORECASE)
+        if expiry_match:
+            expiry_date = expiry_match.group(1).strip()
+        
+        # Extract address
+        address_match = re.search(r'ALAMAT:\s*(.+?)(?=\n|$)', response_text, re.IGNORECASE)
+        if address_match:
+            address = address_match.group(1).strip()
+        
+        return {
+            "name": name,
+            "ic_number": ic_number,
+            "license_number": license_number,
+            "nationality": nationality,
+            "class": license_class,
+            "expiry_date": expiry_date,
+            "address": address
         }
 
 # Global VLM service instance

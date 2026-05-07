@@ -357,6 +357,94 @@ def update_pdrm_statement(
     
     return {"message": "PDRM statement updated successfully"}
 
+# Semakan Saman - Traffic Fine Check endpoints
+class PlateAnalysisRequest(BaseModel):
+    plate_number: str
+
+class PlateAnalysisResponse(BaseModel):
+    plate_number: str
+    vehicle_type: Optional[str] = None
+    vehicle_color: Optional[str] = None
+    registration_expiry: Optional[str] = None
+    road_tax_status: Optional[str] = None
+    confidence_score: float
+
+@app.post("/semakan/analyze-plate", response_model=PlateAnalysisResponse)
+async def analyze_plate_number(
+    file: UploadFile = File(...),
+    current_user: User = Depends(get_current_active_user),
+    db: Session = Depends(get_db)
+):
+    """Analyze a vehicle image to extract and verify plate number using VLM."""
+    try:
+        # Save uploaded file temporarily
+        temp_path = os.path.join(UPLOAD_DIR, f"temp_plate_{uuid.uuid4()}_{file.filename}")
+        with open(temp_path, "wb") as buffer:
+            content = await file.read()
+            buffer.write(content)
+        
+        # Call VLM service to analyze the image
+        analysis_result = await vlm_service.analyze_plate_number(temp_path)
+        
+        # Clean up temp file
+        if os.path.exists(temp_path):
+            os.remove(temp_path)
+        
+        return PlateAnalysisResponse(
+            plate_number=analysis_result.get("plate_number", ""),
+            vehicle_type=analysis_result.get("vehicle_type"),
+            vehicle_color=analysis_result.get("vehicle_color"),
+            registration_expiry=analysis_result.get("registration_expiry"),
+            road_tax_status=analysis_result.get("road_tax_status"),
+            confidence_score=analysis_result.get("confidence_score", 0.8)
+        )
+    except Exception as e:
+        logger.error(f"Error analyzing plate number: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Failed to analyze plate number: {str(e)}")
+
+class LicenseAnalysisResponse(BaseModel):
+    name: str
+    ic_number: str
+    license_number: str
+    address: str
+    expiry_date: str
+    nationality: str
+    license_class: str
+
+@app.post("/semakan/analyze-license", response_model=LicenseAnalysisResponse)
+async def analyze_license(
+    file: UploadFile = File(...),
+    current_user: User = Depends(get_current_active_user),
+    db: Session = Depends(get_db)
+):
+    """Analyze a driver license image to extract driver information using VLM."""
+    try:
+        # Save uploaded file temporarily
+        temp_path = os.path.join(UPLOAD_DIR, f"temp_license_{uuid.uuid4()}_{file.filename}")
+        with open(temp_path, "wb") as buffer:
+            content = await file.read()
+            buffer.write(content)
+        
+        # Call VLM service to analyze the image
+        analysis_result = await vlm_service.analyze_license(temp_path)
+        
+        # Clean up temp file
+        if os.path.exists(temp_path):
+            os.remove(temp_path)
+        
+        return LicenseAnalysisResponse(
+            name=analysis_result.get("name", ""),
+            ic_number=analysis_result.get("ic_number", ""),
+            license_number=analysis_result.get("license_number", ""),
+            address=analysis_result.get("address", ""),
+            expiry_date=analysis_result.get("expiry_date", ""),
+            nationality=analysis_result.get("nationality", ""),
+            license_class=analysis_result.get("class", "")
+        )
+    except Exception as e:
+        logger.error(f"Error analyzing license: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Failed to analyze license: {str(e)}")
+
 # Health check
 @app.get("/health")
 def health_check():
