@@ -252,66 +252,94 @@ export default function SemakanSaman() {
 
     setAnalyzing(true);
     setError("");
+    setPlateNumber(null);
+    setDriverInfo(null);
+    setFines([]);
+    setStats(null);
 
     try {
-      // Analyze car plate image
+      // Collect results from both analyses
+      let extractedPlate: string | null = null;
+      let extractedFines: Fine[] = [];
+      let extractedStats: CarStats | null = null;
+      let extractedDriver: DriverInfo | null = null;
+
+      // Process both images in parallel
+      const promises: Promise<void>[] = [];
+
       if (selectedFile) {
-        const token = localStorage.getItem("token");
-        const formData = new FormData();
-        formData.append("file", selectedFile);
+        promises.push(
+          (async () => {
+            const token = localStorage.getItem("token");
+            const formData = new FormData();
+            formData.append("file", selectedFile);
 
-        const response = await fetch("http://localhost:8000/semakan/analyze-plate", {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-          body: formData,
-        });
+            const response = await fetch("http://localhost:8000/semakan/analyze-plate", {
+              method: "POST",
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+              body: formData,
+            });
 
-        if (!response.ok) {
-          throw new Error("Failed to analyze plate image");
-        }
+            if (!response.ok) {
+              throw new Error("Failed to analyze plate image");
+            }
 
-        const data = await response.json();
-        const extractedPlate = data.plate_number;
-        setPlateNumber(extractedPlate);
+            const data = await response.json();
+            extractedPlate = data.plate_number;
 
-        // Generate mock data based on the plate number
-        const { fines: mockFines, stats: mockStats } = generateMockData(extractedPlate);
-        setFines(mockFines);
-        setStats(mockStats);
+            // Generate mock data based on the plate number
+            if (extractedPlate) {
+              const { fines, stats } = generateMockData(extractedPlate);
+              extractedFines = fines;
+              extractedStats = stats;
+            }
+          })()
+        );
       }
 
-      // Analyze driver license image
       if (selectedLicenseFile) {
-        const token = localStorage.getItem("token");
-        const formData = new FormData();
-        formData.append("file", selectedLicenseFile);
+        promises.push(
+          (async () => {
+            const token = localStorage.getItem("token");
+            const formData = new FormData();
+            formData.append("file", selectedLicenseFile);
 
-        const response = await fetch("http://localhost:8000/semakan/analyze-license", {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-          body: formData,
-        });
+            const response = await fetch("http://localhost:8000/semakan/analyze-license", {
+              method: "POST",
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+              body: formData,
+            });
 
-        if (!response.ok) {
-          throw new Error("Failed to analyze license image");
-        }
+            if (!response.ok) {
+              throw new Error("Failed to analyze license image");
+            }
 
-        const data = await response.json();
-        // Set driver info from OCR result
-        setDriverInfo({
-          name: data.name || mockDriverData.name,
-          ic_number: data.ic_number || mockDriverData.ic_number,
-          license_number: data.license_number || mockDriverData.license_number,
-          address: data.address || mockDriverData.address,
-          expiry_date: data.expiry_date || mockDriverData.expiry_date,
-          nationality: data.nationality || mockDriverData.nationality,
-          class: data.license_class || mockDriverData.class,
-        });
+            const data = await response.json();
+            // Set driver info from OCR result
+            extractedDriver = {
+              name: data.name || mockDriverData.name,
+              ic_number: data.ic_number || mockDriverData.ic_number,
+              license_number: data.license_number || mockDriverData.license_number,
+              address: data.address || mockDriverData.address,
+              expiry_date: data.expiry_date || mockDriverData.expiry_date,
+              nationality: data.nationality || mockDriverData.nationality,
+              class: data.license_class || mockDriverData.class,
+            };
+          })()
+        );
       }
+
+      await Promise.all(promises);
+
+      // Set all state at once after both analyses complete
+      if (extractedPlate) setPlateNumber(extractedPlate);
+      if (extractedFines.length > 0) setFines(extractedFines);
+      if (extractedStats) setStats(extractedStats);
+      if (extractedDriver) setDriverInfo(extractedDriver);
     } catch (err) {
       // Fallback to mock analysis if API fails
       console.error("Analysis error:", err);
@@ -319,11 +347,10 @@ export default function SemakanSaman() {
       // Simulate plate number extraction from mock
       if (selectedFile) {
         const mockPlate = "WVA 1234";
+        const { fines, stats } = generateMockData(mockPlate);
         setPlateNumber(mockPlate);
-        
-        const { fines: mockFines, stats: mockStats } = generateMockData(mockPlate);
-        setFines(mockFines);
-        setStats(mockStats);
+        setFines(fines);
+        setStats(stats);
       }
 
       // Simulate driver license OCR
@@ -526,15 +553,32 @@ export default function SemakanSaman() {
           </div>
         </div>
 
+        {/* Loading Animation */}
+        {analyzing && (
+          <div className="flex flex-col items-center gap-4 rounded-[10px] border border-stroke bg-white p-8 shadow-sm dark:border-gray-800 dark:bg-gray-dark">
+            <div className="relative h-16 w-16">
+              <div className="absolute h-full w-full animate-spin rounded-full border-4 border-gray-200 border-t-brand-500"></div>
+              <div className="absolute inset-0 flex items-center justify-center">
+                <FileIcon className="h-6 w-6 text-brand-500 animate-pulse" />
+              </div>
+            </div>
+            <p className="text-sm font-medium text-gray-500 dark:text-gray-400">
+              Menganalisis gambar...
+            </p>
+            <p className="text-xs text-gray-400 dark:text-gray-500">
+              Sila tunggu sementara sistem memproses gambar
+            </p>
+          </div>
+        )}
+
         {/* Analyze Button */}
-        {canAnalyze && !plateNumber && !driverInfo && (
+        {canAnalyze && !analyzing && !plateNumber && !driverInfo && (
           <div className="flex justify-center">
             <button
               onClick={analyzeImages}
-              disabled={analyzing}
-              className="rounded-lg bg-brand-500 px-8 py-3 text-sm font-medium text-white hover:bg-brand-600 disabled:bg-gray-300 dark:disabled:bg-gray-700 disabled:opacity-50"
+              className="rounded-lg bg-brand-500 px-8 py-3 text-sm font-medium text-white hover:bg-brand-600"
             >
-              {analyzing ? "Menganalisis..." : "Analisis"}
+              Analisis
             </button>
           </div>
         )}
