@@ -1,39 +1,45 @@
-import EcommerceMetrics from "../../components/ecommerce/EcommerceMetrics";
-import MonthlySalesChart from "../../components/ecommerce/MonthlySalesChart";
-import StatisticsChart from "../../components/ecommerce/StatisticsChart";
-import MonthlyTarget from "../../components/ecommerce/MonthlyTarget";
-import RecentOrders from "../../components/ecommerce/RecentOrders";
-import DemographicCard from "../../components/ecommerce/DemographicCard";
+import TrafficMetrics from "../../components/ecommerce/TrafficMetrics";
+import SamanTrendChart from "../../components/ecommerce/SamanTrendChart";
+import EnforcementStatsChart from "../../components/ecommerce/EnforcementStatsChart";
+import EnforcementTarget from "../../components/ecommerce/EnforcementTarget";
+import RecentSamanTable from "../../components/ecommerce/RecentSamanTable";
+import StateStatistics from "../../components/ecommerce/StateStatistics";
 import PageMeta from "../../components/common/PageMeta";
 
 export default function Home() {
   return (
     <>
       <PageMeta
-        title="React.js Ecommerce Dashboard | TailAdmin - React.js Admin Dashboard Template"
-        description="This is React.js Ecommerce Dashboard page for TailAdmin - React.js Tailwind CSS Admin Dashboard Template"
+        title="PDRM Traffic Enforcement Dashboard"
+        description="PDRM Traffic Enforcement Dashboard - Monitoring saman issuance, vehicle records, JPJ integration, and enforcement operations"
       />
       <div className="grid grid-cols-12 gap-4 md:gap-6">
-        <div className="col-span-12 space-y-6 xl:col-span-7">
-          <EcommerceMetrics />
-
-          <MonthlySalesChart />
-        </div>
-
-        <div className="col-span-12 xl:col-span-5">
-          <MonthlyTarget />
-        </div>
-
+        {/* Top Row: Metrics - Full Width */}
         <div className="col-span-12">
-          <StatisticsChart />
+          <TrafficMetrics />
         </div>
 
-        <div className="col-span-12 xl:col-span-5">
-          <DemographicCard />
+        {/* Second Row: State Statistics with Map - Full Width */}
+        <div className="col-span-12">
+          <StateStatistics />
         </div>
 
-        <div className="col-span-12 xl:col-span-7">
-          <RecentOrders />
+        {/* Third Row: Saman Trend Chart (wider) + Enforcement Target */}
+        <div className="col-span-12 xl:col-span-8">
+          <SamanTrendChart />
+        </div>
+        <div className="col-span-12 xl:col-span-4">
+          <EnforcementTarget />
+        </div>
+
+        {/* Fourth Row: Enforcement Stats (full width) */}
+        <div className="col-span-12">
+          <EnforcementStatsChart />
+        </div>
+
+        {/* Fifth Row: Recent Saman Table - Full Width */}
+        <div className="col-span-12">
+          <RecentSamanTable />
         </div>
       </div>
     </>
