@@ -67,28 +67,29 @@ if port_in_use 8000; then
     sleep 2
 fi
 
-if port_in_use 3015; then
-    echo -e "${YELLOW}⚠️  Port 3015 is already in use. Attempting to kill existing process...${NC}"
-    pkill -f "react-scripts start" 2>/dev/null || true
+if port_in_use 5173; then
+    echo -e "${YELLOW}⚠️  Port 5173 is already in use. Attempting to kill existing process...${NC}"
+    pkill -f "vite" 2>/dev/null || true
     sleep 2
 fi
 
 # Create uploads directory if it doesn't exist
-mkdir -p uploads
+mkdir -p backend/uploads
 
 # Initialize database
 echo -e "${BLUE}🗄️  Initializing database...${NC}"
-python3 -c "from database import create_tables; create_tables()" 2>/dev/null
+cd backend && python3 -c "from database import create_tables; create_tables()" 2>/dev/null
 if [ $? -eq 0 ]; then
     echo -e "${GREEN}✅ Database initialized${NC}"
 else
     echo -e "${YELLOW}⚠️  Database may already be initialized${NC}"
 fi
+cd ..
 
 # Install Python dependencies if needed
-if [ ! -f ".venv_initialized" ]; then
+if [ ! -f "backend/.venv_initialized" ]; then
     echo -e "${BLUE}📦 Installing Python dependencies...${NC}"
-    pip install -r requirements.txt > /dev/null 2>&1
+    cd backend && pip install -r requirements.txt > /dev/null 2>&1
     if [ $? -eq 0 ]; then
         touch .venv_initialized
         echo -e "${GREEN}✅ Python dependencies installed${NC}"
@@ -96,14 +97,15 @@ if [ ! -f ".venv_initialized" ]; then
         echo -e "${RED}❌ Failed to install Python dependencies${NC}"
         exit 1
     fi
+    cd ..
 else
     echo -e "${GREEN}✅ Python dependencies already installed${NC}"
 fi
 
 # Install Node.js dependencies if needed
-if [ ! -d "frontend/node_modules" ]; then
+if [ ! -d "react-frontend/node_modules" ]; then
     echo -e "${BLUE}📦 Installing Node.js dependencies...${NC}"
-    cd frontend
+    cd react-frontend
     npm install > /dev/null 2>&1
     if [ $? -eq 0 ]; then
         echo -e "${GREEN}✅ Node.js dependencies installed${NC}"
@@ -118,8 +120,9 @@ fi
 
 # Start backend server
 echo -e "${BLUE}🔧 Starting FastAPI backend server...${NC}"
-uvicorn main:app --reload --host 0.0.0.0 --port 8000 > backend.log 2>&1 &
+cd backend && source venv/bin/activate && uvicorn main:app --reload --host 0.0.0.0 --port 8000 > ../backend.log 2>&1 &
 BACKEND_PID=$!
+cd ..
 
 # Wait for backend to start
 echo -e "${YELLOW}⏳ Waiting for backend to start...${NC}"
@@ -140,15 +143,15 @@ done
 
 # Start frontend server
 echo -e "${BLUE}🎨 Starting React frontend server...${NC}"
-cd frontend
-npm start > ../frontend.log 2>&1 &
+cd react-frontend
+npm run dev > ../frontend.log 2>&1 &
 FRONTEND_PID=$!
 cd ..
 
 # Wait for frontend to start
 echo -e "${YELLOW}⏳ Waiting for frontend to start...${NC}"
 for i in {1..60}; do
-    if curl -s http://localhost:3015 > /dev/null 2>&1; then
+    if curl -s http://localhost:5173 > /dev/null 2>&1; then
         echo -e "${GREEN}✅ Frontend server started successfully${NC}"
         break
     fi
@@ -165,13 +168,11 @@ done
 # Success message
 echo -e "\n${GREEN}🎉 PDRM Accident Reporting System is now running!${NC}"
 echo -e "================================================"
-echo -e "${BLUE}📱 Frontend:${NC} http://localhost:3015"
+echo -e "${BLUE}📱 Frontend:${NC} http://localhost:5173"
 echo -e "${BLUE}🔧 Backend API:${NC} http://localhost:8000"
 echo -e "${BLUE}📚 API Documentation:${NC} http://localhost:8000/docs"
-echo -e "\n${YELLOW}💡 Demo Accounts:${NC}"
+echo -e "\n${YELLOW}💡 Demo Account:${NC}"
 echo -e "   Citizen: citizen@demo.com / password"
-echo -e "   PDRM: pdrm@demo.com / password"
-echo -e "   Insurance: insurance@demo.com / password"
 echo -e "\n${YELLOW}📋 Logs:${NC}"
 echo -e "   Backend: tail -f backend.log"
 echo -e "   Frontend: tail -f frontend.log"
