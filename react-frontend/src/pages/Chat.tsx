@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { PaperPlaneIcon, UserCircleIcon, BoltIcon } from "../icons";
+import { PaperPlaneIcon, UserCircleIcon, BoltIcon, MicrophoneIcon } from "../icons";
 
 // Simple helper to render **bold** text only
 const renderBoldText = (text: string) => {
@@ -23,7 +23,10 @@ export default function Chat() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [isRecording, setIsRecording] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+  const audioChunksRef = useRef<Blob[]>([]);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -32,6 +35,171 @@ export default function Chat() {
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
+
+  const startRecording = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const mediaRecorder = new MediaRecorder(stream);
+      mediaRecorderRef.current = mediaRecorder;
+      audioChunksRef.current = [];
+
+      mediaRecorder.ondataavailable = (event) => {
+        if (event.data.size > 0) {
+          audioChunksRef.current.push(event.data);
+        }
+      };
+
+      mediaRecorder.onstop = async () => {
+        const audioBlob = new Blob(audioChunksRef.current, { type: "audio/webm" });
+        stream.getTracks().forEach((track) => track.stop());
+        await transcribeAudio(audioBlob);
+      };
+
+      mediaRecorder.start();
+      setIsRecording(true);
+    } catch (error) {
+      console.error("Error starting recording:", error);
+      alert("Tidak dapat mengakses mikrofon. Sila pastikan kebenaran mikrofon diberikan.");
+    }
+  };
+
+  const stopRecording = () => {
+    if (mediaRecorderRef.current && isRecording) {
+      mediaRecorderRef.current.stop();
+      setIsRecording(false);
+    }
+  };
+
+  const transcribeAudio = async (audioBlob: Blob) => {
+    const formData = new FormData();
+    formData.append("file", audioBlob, "recording.webm");
+    formData.append("model", "whisper-1");
+
+    try {
+      const token = localStorage.getItem("token");
+      const response = await fetch("http://localhost:8000/audio/transcriptions", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        body: formData,
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        if (data.text) {
+          // Directly send the transcribed text as a chat message
+          const transcribedText = data.text;
+          
+          const userMessage: Message = {
+            id: Date.now().toString(),
+            role: "user",
+            content: transcribedText,
+            timestamp: new Date(),
+          };
+
+          setMessages((prev) => [...prev, userMessage]);
+          setIsLoading(true);
+
+          // Prepare assistant message ID
+          const assistantMessageId = (Date.now() + 1).toString();
+          let firstContentReceived = false;
+
+          const chatResponse = await fetch("http://localhost:8000/chat", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({
+              message: transcribedText,
+              conversation_history: messages.map(m => ({
+                role: m.role,
+                content: m.content
+              }))
+            }),
+          });
+
+          if (chatResponse.ok) {
+            const reader = chatResponse.body?.getReader();
+            const decoder = new TextDecoder();
+            let accumulatedContent = "";
+
+            if (reader) {
+              while (true) {
+                const { done, value } = await reader.read();
+                if (done) break;
+
+                const chunk = decoder.decode(value, { stream: true });
+                const lines = chunk.split('\n');
+
+                for (const line of lines) {
+                  if (line.startsWith('data: ')) {
+                    const lineData = line.slice(6);
+                    try {
+                      const parsed = JSON.parse(lineData);
+                      if (parsed.content) {
+                        accumulatedContent += parsed.content;
+                        
+                        if (!firstContentReceived) {
+                          firstContentReceived = true;
+                          setIsLoading(false);
+                          
+                          const assistantMessage: Message = {
+                            id: assistantMessageId,
+                            role: "assistant",
+                            content: accumulatedContent,
+                            timestamp: new Date(),
+                          };
+                          setMessages((prev) => [...prev, assistantMessage]);
+                        } else {
+                          setMessages((prev) =>
+                            prev.map((msg) =>
+                              msg.id === assistantMessageId
+                                ? { ...msg, content: accumulatedContent }
+                                : msg
+                            )
+                          );
+                        }
+                      }
+                    } catch (e) {
+                      // Skip invalid JSON
+                    }
+                  }
+                }
+              }
+            }
+
+            if (!accumulatedContent) {
+              setIsLoading(false);
+              const errorMessage: Message = {
+                id: assistantMessageId,
+                role: "assistant",
+                content: "Maaf, saya tidak dapat menjawab pada masa ini.",
+                timestamp: new Date(),
+              };
+              setMessages((prev) => [...prev, errorMessage]);
+            }
+          } else {
+            setIsLoading(false);
+            const errorMessage: Message = {
+              id: assistantMessageId,
+              role: "assistant",
+              content: "Maaf, berlaku ralat. Sila cuba lagi.",
+              timestamp: new Date(),
+            };
+            setMessages((prev) => [...prev, errorMessage]);
+          }
+        }
+      } else {
+        console.error("Transcription failed:", await response.text());
+        alert("Maaf, transkripsi audio gagal. Sila cuba lagi.");
+      }
+    } catch (error) {
+      console.error("Transcription error:", error);
+      alert("Maaf, berlaku ralat semasa transkripsi. Sila cuba lagi.");
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -259,6 +427,18 @@ export default function Chat() {
               className="flex-1 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3 text-sm text-gray-800 dark:text-white/90 placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-500"
               disabled={isLoading}
             />
+            <button
+              type="button"
+              onClick={isRecording ? stopRecording : startRecording}
+              disabled={isLoading}
+              className={`px-4 py-3 rounded-xl disabled:cursor-not-allowed transition-colors ${
+                isRecording
+                  ? "bg-red-500 hover:bg-red-600 text-white"
+                  : "bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-600 dark:text-gray-300"
+              }`}
+            >
+              <MicrophoneIcon className="w-5 h-5" />
+            </button>
             <button
               type="submit"
               disabled={!input.trim() || isLoading}

@@ -54,17 +54,36 @@ def search_car_saman(plate_query: str) -> Optional[Dict[str, Any]]:
     """Search for car saman data by plate number."""
     # Normalize the query - remove spaces, uppercase
     normalized_query = plate_query.replace(" ", "").upper()
+    print(f"[DEBUG] Searching for plate: '{plate_query}' -> normalized: '{normalized_query}'")
+    print(f"[DEBUG] Available plates: {list(CAR_SAMAN_DATA.keys())[:10]}...")
     
     # Try exact match first
     if normalized_query in CAR_SAMAN_DATA:
+        print(f"[DEBUG] Found exact match for {normalized_query}")
         return CAR_SAMAN_DATA[normalized_query]
     
     # Try partial match
     for plate, data in CAR_SAMAN_DATA.items():
         if normalized_query in plate or plate in normalized_query:
+            print(f"[DEBUG] Found partial match: query '{normalized_query}' matched plate '{plate}'")
             return data
     
+    print(f"[DEBUG] No match found for {normalized_query}")
     return None
+
+def convert_malay_numbers(text: str) -> str:
+    """Convert Malay number words to digits."""
+    malay_numbers = {
+        'satu': '1', 'dua': '2', 'tiga': '3', 'empat': '4', 'lima': '5',
+        'enam': '6', 'tujuh': '7', 'lapan': '8', 'sembilan': '9', 'sepuluh': '10',
+        'sebelas': '11', 'belas': '', 'puluh': '0'
+    }
+    
+    text_lower = text.lower()
+    for word, digit in malay_numbers.items():
+        text_lower = text_lower.replace(word, digit)
+    
+    return text_lower
 
 def extract_plate_from_message(message: str) -> Optional[str]:
     """Extract license plate number from user message."""
@@ -75,9 +94,27 @@ def extract_plate_from_message(message: str) -> Optional[str]:
     ]
     
     message_upper = message.upper()
+    print(f"[DEBUG] Extracting plate from message: {message}")
+    
+    # Try direct extraction first
     for pattern in patterns:
         match = re.search(pattern, message_upper)
         if match:
+            plate = match.group(1).replace(" ", "")
+            print(f"[DEBUG] Plate extracted (direct): {plate}")
+            return plate
+    
+    # Try with Malay number conversion
+    message_with_numbers = convert_malay_numbers(message)
+    message_with_numbers_upper = message_with_numbers.upper()
+    print(f"[DEBUG] Message after number conversion: {message_with_numbers_upper}")
+    
+    for pattern in patterns:
+        match = re.search(pattern, message_with_numbers_upper)
+        if match:
+            plate = match.group(1).replace(" ", "")
+            print(f"[DEBUG] Plate extracted (after number conversion): {plate}")
+            return plate
             return match.group(1).replace(" ", "")
     
     return None
@@ -371,10 +408,12 @@ Penemuan Utama:
         """Build saman context from the message if a plate number is detected."""
         plate = extract_plate_from_message(message)
         if not plate:
+            print("[DEBUG] No plate extracted from message")
             return ""
         
         saman_data = search_car_saman(plate)
         if not saman_data:
+            print(f"[DEBUG] No saman data found for plate: {plate}")
             return ""
         
         context = f"""
@@ -391,16 +430,20 @@ Penemuan Utama:
         
         GUNAKAN DATA DI ATAS UNTUK MENJAWAB SOALAN MENGENAI SAMAN KENDERAAN INI.
         """
+        print(f"[DEBUG] Built saman context for plate {plate}")
         return context
     
     def _get_system_prompt(self, message: str) -> str:
         """Get the appropriate system prompt, including saman data if relevant."""
-        base_prompt = "Anda adalah pembantu AI untuk sistem laporan kemalangan PDRM. Anda membantu pengguna dengan pertanyaan tentang laporan kemalangan, proses tuntutan insurans, dan sebarang pertanyaan berkaitan. Berikan jawapan yang jelas, tepat, dan dalam Bahasa Melayu apabila mungkin. Anda adalah pembantu yang mesra dan profesional."
+        base_prompt = """Anda adalah pembantu AI untuk sistem laporan kemalangan PDRM. Anda membantu pengguna dengan pertanyaan tentang laporan kemalangan, proses tuntutan insurans, dan sebarang pertanyaan berkaitan. Berikan jawapan yang jelas, tepat, dan dalam Bahasa Melayu apabila mungkin. Anda adalah pembantu yang mesra dan profesional.
+
+IMPORTANT: Jika pengguna bertanya tentang saman kereta atau nombor plat kenderaan (seperti "vmx7352", "VMX 7352", "ABC 1234"), anda BOLEH memberikan maklumat saman dari data yang diberikan kepada anda. Jangan beritahu pengguna yang anda tidak mempunyai akses - gunakan data yang disediakan."""
         
         # Add saman context if plate number is detected
         saman_context = self._build_saman_context(message)
         if saman_context:
             base_prompt = base_prompt + saman_context
+            print(f"[DEBUG] Added saman context to prompt. Total length: {len(base_prompt)}")
         
         return base_prompt
     

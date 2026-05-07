@@ -8,6 +8,7 @@ import os
 import shutil
 import json
 import logging
+import aiohttp
 from datetime import datetime, timedelta
 import uuid
 
@@ -152,6 +153,61 @@ async def chat_with_ai(
             "X-Accel-Buffering": "no",
         }
     )
+
+@app.post("/audio/transcriptions")
+async def transcribe_audio(
+    file: UploadFile = File(...),
+    current_user: User = Depends(get_current_active_user)
+):
+    """Transcribe audio file using Whisper API."""
+    try:
+        # Read file content
+        file_content = await file.read()
+        
+        # Call Whisper API using environment variables
+        whisper_api_key = os.getenv("WHISPER_API_KEY", "sk-2iTJBlqeaDWPTmGHm-kfbg")
+        whisper_api_base = os.getenv("WHISPER_API_URL", "http://60.51.17.97:9999/v1").rstrip("/")
+        whisper_model = os.getenv("WHISPER_MODEL", "whisper-large-v3-turbo")
+        
+        # Try different endpoint paths
+        endpoints = [
+            f"{whisper_api_base}/audio/transcriptions",
+            f"{whisper_api_base}/transcriptions",
+        ]
+        
+        # Create form data manually
+        form_data = aiohttp.FormData()
+        form_data.add_field(
+            "file",
+            file_content,
+            filename=file.filename or "recording.webm",
+            content_type=file.content_type or "audio/webm"
+        )
+        form_data.add_field("model", whisper_model)
+        
+        headers = {"Authorization": f"Bearer {whisper_api_key}"}
+        
+        last_error = None
+        for endpoint in endpoints:
+            try:
+                async with aiohttp.ClientSession() as session:
+                    async with session.post(endpoint, headers=headers, data=form_data) as response:
+                        if response.status == 200:
+                            result = await response.json()
+                            return {"text": result.get("text", "")}
+                        else:
+                            last_error = f"Status {response.status}: {await response.text()}"
+                            print(f"Whisper API error at {endpoint}: {last_error}")
+            except Exception as e:
+                last_error = str(e)
+                print(f"Whisper API error at {endpoint}: {last_error}")
+                continue
+        
+        return {"text": "", "error": f"Transcription failed: {last_error}"}
+        
+    except Exception as e:
+        print(f"Transcription error: {str(e)}")
+        return {"text": "", "error": str(e)}
 
 # Accident Report endpoints
 @app.post("/reports", response_model=AccidentReportSchema)
