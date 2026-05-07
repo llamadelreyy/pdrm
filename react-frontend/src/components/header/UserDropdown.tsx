@@ -28,7 +28,15 @@ export default function UserDropdown() {
         className="flex items-center text-gray-700 dropdown-toggle dark:text-gray-400"
       >
         <span className="mr-3 overflow-hidden rounded-full h-11 w-11">
-          <img src="/images/user/owner.jpg" alt="User" />
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full bg-gray-200 dark:bg-gray-700">
+            <rect x="3" y="8" width="18" height="12" rx="2" fill="#6B7280"/>
+            <rect x="7" y="2" width="10" height="8" rx="1" fill="#6B7280"/>
+            <circle cx="9" cy="5" r="1.5" fill="#9CA3AF"/>
+            <circle cx="15" cy="5" r="1.5" fill="#9CA3AF"/>
+            <rect x="10" y="12" width="4" height="3" rx="0.5" fill="#9CA3AF"/>
+            <rect x="8" y="17" width="2" height="3" rx="0.5" fill="#4B5563"/>
+            <rect x="14" y="17" width="2" height="3" rx="0.5" fill="#4B5563"/>
+          </svg>
         </span>
 
         <span className="block mr-1 font-medium text-theme-sm">{user?.full_name || "User"}</span>
