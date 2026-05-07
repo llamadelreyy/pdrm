@@ -287,6 +287,141 @@ Penemuan Utama:
             "risk_factors": mock_risks,
             "supporting_evidence": mock_evidence
         }
+    
+    async def chat(self, message: str, conversation_history: list = None) -> str:
+        """
+        General chat endpoint for AI conversations.
+        Used for user queries about accident reports and general assistance.
+        Uses VLM API configuration.
+        """
+        try:
+            # Use VLM API configuration
+            vlm_api_key = os.getenv("VLM_API_KEY", "sk-2iTJBlqeaDWPTmGHm-kfbg")
+            vlm_api_url = os.getenv("VLM_API_URL", "http://60.51.17.97:9999/v1/chat/completions")
+            vlm_model = os.getenv("VLM_MODEL", "qwen3.5-397b-a17b-fp8-instruct")
+            
+            headers = {
+                "Authorization": f"Bearer {vlm_api_key}",
+                "Content-Type": "application/json"
+            }
+            
+            # Build conversation messages
+            messages = [
+                {
+                    "role": "system",
+                    "content": "Anda adalah pembantu AI untuk sistem laporan kemalangan PDRM. Anda membantu pengguna dengan pertanyaan tentang laporan kemalangan, proses tuntutan insurans, dan sebarang pertanyaan berkaitan. Berikan jawapan yang jelas, tepat, dan dalam Bahasa Melayu apabila mungkin. Anda adalah pembantu yang mesra dan profesional."
+                }
+            ]
+            
+            # Add conversation history if provided
+            if conversation_history:
+                for msg in conversation_history[-10:]:  # Limit to last 10 messages
+                    messages.append({
+                        "role": msg.get("role", "user"),
+                        "content": msg.get("content", "")
+                    })
+            
+            # Add current message
+            messages.append({
+                "role": "user",
+                "content": message
+            })
+            
+            payload = {
+                "model": vlm_model,
+                "messages": messages,
+                "max_tokens": 1000,
+                "temperature": 0.7
+            }
+            
+            async with aiohttp.ClientSession() as session:
+                async with session.post(vlm_api_url, headers=headers, json=payload) as response:
+                    if response.status == 200:
+                        result = await response.json()
+                        content = result.get("choices", [{}])[0].get("message", {}).get("content", "")
+                        return content if content else "Maaf, saya tidak dapat menjawab pada masa ini."
+                    else:
+                        error_text = await response.text()
+                        print(f"Chat API error: {response.status} - {error_text}")
+                        return "Maaf, berlaku ralat sistem. Sila cuba lagi sebentar lagi."
+                        
+        except Exception as e:
+            print(f"Chat error: {str(e)}")
+            return "Maaf, berlaku ralat sistem. Sila cuba lagi sebentar lagi."
+    
+    async def chat_stream(self, message: str, conversation_history: list = None):
+        """
+        Streaming chat endpoint for AI conversations.
+        Yields content chunks for StreamingResponse.
+        """
+        try:
+            # Use VLM API configuration
+            vlm_api_key = os.getenv("VLM_API_KEY", "sk-2iTJBlqeaDWPTmGHm-kfbg")
+            vlm_api_url = os.getenv("VLM_API_URL", "http://60.51.17.97:9999/v1/chat/completions")
+            vlm_model = os.getenv("VLM_MODEL", "qwen3.5-397b-a17b-fp8-instruct")
+            
+            headers = {
+                "Authorization": f"Bearer {vlm_api_key}",
+                "Content-Type": "application/json"
+            }
+            
+            # Build conversation messages
+            messages = [
+                {
+                    "role": "system",
+                    "content": "Anda adalah pembantu AI untuk sistem laporan kemalangan PDRM. Anda membantu pengguna dengan pertanyaan tentang laporan kemalangan, proses tuntutan insurans, dan sebarang pertanyaan berkaitan. Berikan jawapan yang jelas, tepat, dan dalam Bahasa Melayu apabila mungkin. Anda adalah pembantu yang mesra dan profesional."
+                }
+            ]
+            
+            # Add conversation history if provided
+            if conversation_history:
+                for msg in conversation_history[-10:]:  # Limit to last 10 messages
+                    messages.append({
+                        "role": msg.get("role", "user"),
+                        "content": msg.get("content", "")
+                    })
+            
+            # Add current message
+            messages.append({
+                "role": "user",
+                "content": message
+            })
+            
+            payload = {
+                "model": vlm_model,
+                "messages": messages,
+                "max_tokens": 1000,
+                "temperature": 0.7,
+                "stream": True
+            }
+            
+            async with aiohttp.ClientSession() as session:
+                async with session.post(vlm_api_url, headers=headers, json=payload) as response:
+                    if response.status == 200:
+                        # Stream the response
+                        async for line in response.content:
+                            if line:
+                                line_text = line.decode('utf-8').strip()
+                                if line_text.startswith('data: '):
+                                    data_text = line_text[6:]  # Remove 'data: ' prefix
+                                    if data_text == '[DONE]':
+                                        break
+                                    try:
+                                        data = json.loads(data_text)
+                                        delta = data.get("choices", [{}])[0].get("delta", {})
+                                        content = delta.get("content", "")
+                                        if content:
+                                            yield f"data: {json.dumps({'content': content})}\n\n"
+                                    except json.JSONDecodeError:
+                                        continue
+                    else:
+                        error_text = await response.text()
+                        print(f"Chat stream API error: {response.status} - {error_text}")
+                        yield f"data: {json.dumps({'content': 'Maaf, berlaku ralat sistem. Sila cuba lagi sebentar lagi.'})}\n\n"
+                        
+        except Exception as e:
+            print(f"Chat stream error: {str(e)}")
+            yield f"data: {json.dumps({'content': 'Maaf, berlaku ralat sistem. Sila cuba lagi sebentar lagi.'})}\n\n"
 
 # Global LLM service instance
 llm_service = LLMService()

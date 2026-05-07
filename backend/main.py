@@ -1,6 +1,7 @@
 from fastapi import FastAPI, Depends, HTTPException, status, UploadFile, File, Form
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
+from fastapi.responses import StreamingResponse
 from sqlalchemy.orm import Session
 from typing import List, Optional
 import os
@@ -124,6 +125,33 @@ def login_user(user_credentials: UserLogin, db: Session = Depends(get_db)):
 def get_current_user_info(current_user: User = Depends(get_current_active_user)):
     """Get current user information."""
     return current_user
+
+# Chat endpoint
+from pydantic import BaseModel
+from typing import List, Optional
+
+class ChatRequest(BaseModel):
+    message: str
+    conversation_history: Optional[List[dict]] = None
+
+class ChatResponse(BaseModel):
+    response: str
+
+@app.post("/chat")
+async def chat_with_ai(
+    request: ChatRequest,
+    current_user: User = Depends(get_current_active_user)
+):
+    """Chat with AI assistant for accident report related questions. Supports streaming."""
+    return StreamingResponse(
+        llm_service.chat_stream(request.message, request.conversation_history),
+        media_type="text/event-stream",
+        headers={
+            "Cache-Control": "no-cache",
+            "Connection": "keep-alive",
+            "X-Accel-Buffering": "no",
+        }
+    )
 
 # Accident Report endpoints
 @app.post("/reports", response_model=AccidentReportSchema)

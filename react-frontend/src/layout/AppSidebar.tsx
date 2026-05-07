@@ -14,6 +14,7 @@ import {
   PlugInIcon,
   TableIcon,
   UserCircleIcon,
+  ChatIcon,
 } from "../icons";
 import { useSidebar } from "../context/SidebarContext";
 
@@ -34,6 +35,11 @@ const navItems: NavItem[] = [
     name: "Laporan Kemalangan",
     icon: <ListIcon />,
     path: "/form-elements",
+  },
+  {
+    name: "AI Chat",
+    icon: <ChatIcon />,
+    path: "/chat",
   },
   {
     name: "Tables",

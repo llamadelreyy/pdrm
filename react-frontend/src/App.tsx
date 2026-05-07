@@ -14,6 +14,7 @@ import BarChart from "./pages/Charts/BarChart";
 import Calendar from "./pages/Calendar";
 import BasicTables from "./pages/Tables/BasicTables";
 import ReportForm from "./pages/Forms/ReportForm";
+import Chat from "./pages/Chat";
 import Blank from "./pages/Blank";
 import AppLayout from "./layout/AppLayout";
 import { ScrollToTop } from "./components/common/ScrollToTop";
@@ -45,6 +46,7 @@ export default function App() {
 
             {/* Forms */}
             <Route path="/form-elements" element={<ReportForm />} />
+            <Route path="/chat" element={<Chat />} />
 
             {/* Tables */}
             <Route path="/basic-tables" element={<BasicTables />} />

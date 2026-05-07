@@ -36,6 +36,18 @@ export default function SignInForm() {
 
       const data = await response.json();
       localStorage.setItem("token", data.access_token);
+      
+      // Fetch user info and store it
+      const userResponse = await fetch("http://localhost:8000/auth/me", {
+        headers: {
+          Authorization: `Bearer ${data.access_token}`,
+        },
+      });
+      if (userResponse.ok) {
+        const userData = await userResponse.json();
+        localStorage.setItem("user", JSON.stringify(userData));
+      }
+      
       navigate("/");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Login failed");
