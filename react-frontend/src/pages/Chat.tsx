@@ -158,8 +158,8 @@ export default function Chat() {
         <div className="flex-1 overflow-y-auto p-4 space-y-4 no-scrollbar">
           {messages.length === 0 && (
             <div className="flex flex-col items-center justify-center h-full text-center">
-              <div className="p-4 mb-4 bg-gray-100 rounded-full dark:bg-gray-800">
-                <BoltIcon className="w-8 h-8 text-gray-500 dark:text-gray-400" />
+              <div className="p-4 mb-4 bg-gray-200 dark:bg-gray-700 rounded-full">
+                <BoltIcon className="w-8 h-8 text-gray-600 dark:text-gray-300" />
               </div>
               <h3 className="mb-1 text-lg font-medium text-gray-800 dark:text-white/90">
                 Selamat Datang ke AI Chat
@@ -178,8 +178,8 @@ export default function Chat() {
               }`}
             >
               {message.role === "assistant" && (
-                <div className="flex-shrink-0 w-10 h-10 bg-primary-500 rounded-full flex items-center justify-center">
-                  <BoltIcon className="w-5 h-5 text-white" />
+                <div className="flex-shrink-0 w-10 h-10 bg-gray-200 dark:bg-gray-700 rounded-full flex items-center justify-center">
+                  <BoltIcon className="w-5 h-5 text-gray-600 dark:text-gray-300" />
                 </div>
               )}
               
@@ -217,8 +217,8 @@ export default function Chat() {
 
           {isLoading && (
             <div className="flex gap-3 justify-start">
-              <div className="flex-shrink-0 w-10 h-10 bg-primary-500 rounded-full flex items-center justify-center">
-                <BoltIcon className="w-5 h-5 text-white" />
+              <div className="flex-shrink-0 w-10 h-10 bg-gray-200 dark:bg-gray-700 rounded-full flex items-center justify-center">
+                <BoltIcon className="w-5 h-5 text-gray-600 dark:text-gray-300" />
               </div>
               <div className="bg-gray-100 dark:bg-gray-800 rounded-xl rounded-bl-none px-4 py-3">
                 <div className="flex gap-1">
