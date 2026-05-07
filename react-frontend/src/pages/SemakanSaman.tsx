@@ -370,6 +370,18 @@ export default function SemakanSaman() {
   };
 
   const formatDate = (dateString: string) => {
+    // Handle dd/mm/yyyy format from Malaysian driver license
+    const parts = dateString.split('/');
+    if (parts.length === 3) {
+      // If first part is day (1-31) and second is month (1-12), assume dd/mm/yyyy
+      const day = parseInt(parts[0], 10);
+      const month = parseInt(parts[1], 10);
+      if (day <= 31 && month <= 12) {
+        // Rearrange to yyyy-mm-dd for JavaScript Date
+        const year = parts[2].length === 2 ? `20${parts[2]}` : parts[2];
+        dateString = `${year}-${parts[1].padStart(2, '0')}-${parts[0].padStart(2, '0')}`;
+      }
+    }
     return new Date(dateString).toLocaleDateString("ms-MY", {
       day: "numeric",
       month: "long",
